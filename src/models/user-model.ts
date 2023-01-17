@@ -31,7 +31,9 @@ UserSchema.methods.generateAuthToken = function (_id:string, email:string) {
 if(!process.env.JWT_SECRET_KEY) {
     throw new BadRequestError('No secret key in environment');
 }
-const token = jwt.sign({_id, email}, process.env.JWT_SECRET_KEY)
+const token = jwt.sign({_id, email}, process.env.JWT_SECRET_KEY, {
+    expiresIn:'1d'
+})
 return token;
 }
 

@@ -4,7 +4,9 @@ import cookieSession from 'cookie-session';
 import 'express-async-errors'
 import 'dotenv/config'
 
-import signUpRoute from './routes/auth/sign_up'
+import {signUpRouter} from './routes/auth/sign-up'
+import { signInRouter } from "./routes/auth/sign-in";
+import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 
 const app = express();
@@ -15,15 +17,17 @@ app.use(cookieSession({
     signed:false
 }))
 
-app.use(signUpRoute);
+app.use(signUpRouter);
+app.use(signInRouter)
+
 app.all('*', async (req,res) =>{
-    throw new Error('Not found')
+    throw new Error('Route Not found')
 })
 app.use(errorHandler);
 
 const start = async () => {
     if (!process.env.MONGO_URI) {
-        throw new Error('URI not found')
+        throw new BadRequestError('No Mongo URI in environment')
         }
         
     try {

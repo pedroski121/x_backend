@@ -1,8 +1,25 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoose from "mongoose";
+import cookieSession from 'cookie-session';
+import 'express-async-errors'
 import 'dotenv/config'
-const app = express();
 
+import signUpRoute from './routes/auth/sign_up'
+import { errorHandler } from "./middlewares/error-handler";
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+app.set('trust proxy', 1) // trust first proxy
+app.use(cookieSession({
+    signed:false
+}))
+
+app.use(signUpRoute);
+app.all('*', async (req,res) =>{
+    throw new Error('Not found')
+})
+app.use(errorHandler);
 
 const start = async () => {
     if (!process.env.MONGO_URI) {
@@ -10,10 +27,11 @@ const start = async () => {
         }
         
     try {
+        mongoose.set('strictQuery',true)
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to mongodb  database')
-        app.listen(3000, ()=>{
-            console.log('Listening on port 3000')
+        app.listen(5000, ()=>{
+            console.log('Listening on port 5000') 
         })
         
     } catch (error) {

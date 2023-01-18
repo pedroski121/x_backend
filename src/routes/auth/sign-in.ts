@@ -8,11 +8,12 @@ import { User } from '../../models/user-model';
 const router = express.Router()
 
 router.post('/api/user/sign-in', 
-body('email').isEmail(),body('password').isLength({min:5, max:15}),
+body('email').isEmail(),
+body('password').isLength({min:5, max:15}),
 async (req:Request, res:Response) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array());
+        throw new RequestValidationError(errors.array()); 
     }
     const email:string = req.body.email;
     const password:string = req.body.password;
@@ -30,6 +31,5 @@ async (req:Request, res:Response) =>{
     }
     res.status(201).send([{message:'Login successful',success:true}])
 })
-
 
 export {router as signInRouter}

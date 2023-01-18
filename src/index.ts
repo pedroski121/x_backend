@@ -6,8 +6,10 @@ import 'dotenv/config'
 
 import {signUpRouter} from './routes/auth/sign-up'
 import { signInRouter } from "./routes/auth/sign-in";
+import { getCurrentUser } from "./routes/auth/current-user";
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
+import { NotFoundError } from "./errors/not-found";
 
 const app = express();
 app.use(express.json());
@@ -18,12 +20,14 @@ app.use(cookieSession({
 }))
 
 app.use(signUpRouter);
-app.use(signInRouter)
+app.use(signInRouter);
+app.use(getCurrentUser);
 
 app.all('*', async (req,res) =>{
-    throw new Error('Route Not found')
+    throw new NotFoundError()
 })
 app.use(errorHandler);
+
 
 const start = async () => {
     if (!process.env.MONGO_URI) {
@@ -39,7 +43,7 @@ const start = async () => {
         })
         
     } catch (error) {
-        console.log(error)
+        console.log('could not start up server')
     }
 }
 start()

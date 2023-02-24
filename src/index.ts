@@ -28,11 +28,14 @@ app.use(cookieSession({
 app.use(signUpRouter);
 app.use(signInRouter);
 app.use(getCurrentUser);
- 
+app.get('/testing-prod', (req,res)=>{
+    res.send("Website works")
+})
 app.all('*', async (req,res) =>{
     throw new NotFoundError()
 })
 app.use(errorHandler);
+
 
 
 const start = async () => {
@@ -45,7 +48,7 @@ const start = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to mongodb  database')
         app.listen(PORT, ()=>{
-            console.log('Listening on port 5000') 
+            console.log(`Listening on port ${PORT}`) 
         })
         
     } catch (error) {

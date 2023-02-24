@@ -13,10 +13,11 @@ import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
 
 const app = express();
+const PORT:number = parseInt(`${process.env.PORT}`) || 5000
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors({
-    origin:'http://localhost:3000',
+    origin:process.env.ORIGIN,
     credentials:true
 }))
 app.set('trust proxy', 1); // trust first proxy
@@ -43,7 +44,7 @@ const start = async () => {
         mongoose.set('strictQuery',true)
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to mongodb  database')
-        app.listen(5000, ()=>{
+        app.listen(PORT, ()=>{
             console.log('Listening on port 5000') 
         })
         

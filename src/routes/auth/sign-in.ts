@@ -7,9 +7,9 @@ import { User } from '../../models/user-model';
 
 const router = express.Router()
 
-router.post('/api/user/sign-in', 
+router.post('/api/auth/sign-in', 
 body('email').isEmail(),
-body('password').isLength({min:5, max:15}),
+body('password').isLength({min:5}),
 async (req:Request, res:Response) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()) {

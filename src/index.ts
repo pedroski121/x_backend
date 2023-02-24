@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from 'cors';
 import cookieSession from 'cookie-session';
 import 'express-async-errors'
 import 'dotenv/config'
@@ -13,8 +14,12 @@ import { NotFoundError } from "./errors/not-found";
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended:true}))
-app.set('trust proxy', 1) // trust first proxy
+app.use(express.urlencoded({extended:true}));
+app.use(cors({
+    origin:'http://localhost:3000',
+    credentials:true
+}))
+app.set('trust proxy', 1); // trust first proxy
 app.use(cookieSession({
     signed:false
 }))
@@ -22,7 +27,7 @@ app.use(cookieSession({
 app.use(signUpRouter);
 app.use(signInRouter);
 app.use(getCurrentUser);
-
+ 
 app.all('*', async (req,res) =>{
     throw new NotFoundError()
 })

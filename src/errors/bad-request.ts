@@ -9,7 +9,8 @@ export class BadRequestError extends CustomError {
         return [
             {
                 message:this.message,
-                success:false
+                success:false,
+                
             }
         ]
     }

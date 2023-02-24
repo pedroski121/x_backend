@@ -4,14 +4,15 @@ import bcrypt from "bcrypt";
 import { BadRequestError } from '../../errors/bad-request';
 import { RequestValidationError } from '../../errors/request-validation-error';
 import { User } from '../../models/user-model';
-
 const router = express.Router();
 
-router.post('/api/user/sign-up',
- body('email').isEmail(),body('password').isLength({min:5, max:15}),
-async (req:Request, res:Response)=>{
+router.post('/api/auth/sign-up',
+ body('email').isEmail(),
+ body('password').isLength({min:5}),
+ body('fullName').isLength({min:2}),
+async (req:Request, res:Response )=>{
     const errors = validationResult(req);
-    if(!errors.isEmpty()) {
+    if(!errors.isEmpty()) { 
         throw new RequestValidationError(errors.array());
     }
     const fullName:string = req.body.fullName;
@@ -28,7 +29,7 @@ async (req:Request, res:Response)=>{
             if(err){
                  throw new BadRequestError('An error occured while saving the new user crendentials');
             } else {
-                res.status(201).send([{success:true, message:'Registration successful'}]);
+                res.status(201).json([{success:true, message:'Registration successful'}]);
             }
         })
 })  

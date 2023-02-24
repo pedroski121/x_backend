@@ -2,7 +2,7 @@ import express ,{Request, Response, NextFunction} from 'express';
 import { currentUser } from '../../middlewares/current-user';
 const router = express.Router();
 
-router.get('/api/user/current-user',currentUser,(req:Request,res:Response)=>{
+router.get('/api/auth/current-user',currentUser,(req:Request,res:Response)=>{
     if(req.currentUser){
         res.send([{currentUser:req.currentUser}]);
     } 

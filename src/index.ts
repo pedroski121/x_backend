@@ -13,13 +13,13 @@ import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
 
 const app = express();
-const PORT:number = parseInt(`${process.env.PORT}`) || 5000
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
 app.use(cors({
     origin:process.env.ORIGIN,
     credentials:true
 }))
+const PORT:number = parseInt(`${process.env.PORT}`) || 5000
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.set('trust proxy', 1); // trust first proxy
 app.use(cookieSession({
     signed:false
@@ -28,9 +28,6 @@ app.use(cookieSession({
 app.use(signUpRouter);
 app.use(signInRouter);
 app.use(getCurrentUser);
-app.get('/testing-prod', (req,res)=>{
-    res.send("Website works")
-})
 app.all('*', async (req,res) =>{
     throw new NotFoundError()
 })

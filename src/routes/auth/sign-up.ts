@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { BadRequestError } from '../../errors/bad-request';
 import { RequestValidationError } from '../../errors/request-validation-error';
 import { User } from '../../models/user-model';
+
 const router = express.Router();
 
 router.post('/api/auth/sign-up',

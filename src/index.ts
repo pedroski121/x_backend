@@ -8,9 +8,14 @@ import 'dotenv/config'
 import {signUpRouter} from './routes/auth/sign-up'
 import { signInRouter } from "./routes/auth/sign-in";
 import { getCurrentUser } from "./routes/auth/current-user";
+import { addNewProduct } from "./routes/product/new-product";
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
+import { getAllProducts } from "./routes/product/all-products";
+import { findProduct } from "./routes/product/find-product";
+import { updateProduct } from "./routes/product/update-product";
+import { deleteProduct } from "./routes/product/delete-products";
 
 const app = express();
 app.use(cors({
@@ -28,6 +33,13 @@ app.use(cookieSession({
 app.use(signUpRouter);
 app.use(signInRouter);
 app.use(getCurrentUser);
+
+app.use(addNewProduct);
+app.use(getAllProducts);
+app.use(findProduct);
+app.use(updateProduct);
+app.use(deleteProduct);
+
 app.all('*', async (req,res) =>{
     throw new NotFoundError()
 })

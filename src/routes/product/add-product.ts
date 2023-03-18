@@ -6,7 +6,7 @@ import { Product } from "../../models/product-model";
 
 const router = express.Router();
 
-router.post('/api/product/new',
+router.post('/api/product/add',
 check(["name", "price", "category", "subCategory", "specification", "storeID","storeName","quantity"]).notEmpty(),
 check(["price","quantity"]).isInt({gt:0}),
 (req:Request,res:Response)=>{
@@ -18,7 +18,7 @@ check(["price","quantity"]).isInt({gt:0}),
                 error.msg = "The price should not be less than 1"
             }
             if(error.param == "quantity"){
-                error.msg="The product should not be less than 1"
+                error.msg="The product quantity should not be less than 1"
             }
         })
         throw new RequestValidationError(errorsArray);

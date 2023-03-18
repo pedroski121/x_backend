@@ -4,7 +4,6 @@ import { Product } from "../../models/product-model";
 const router = express.Router();
 
 router.get("/api/product/all",
-
 async (req:Request,res:Response)=>{
     const allProducts = await Product.find({})
     .catch((err)=>{

@@ -8,14 +8,24 @@ import 'dotenv/config'
 import {signUpRouter} from './routes/auth/sign-up'
 import { signInRouter } from "./routes/auth/sign-in";
 import { getCurrentUser } from "./routes/auth/current-user";
-import { addNewProduct } from "./routes/product/new-product";
-import { BadRequestError } from "./errors/bad-request";
-import { errorHandler } from "./middlewares/error-handler";
-import { NotFoundError } from "./errors/not-found";
+
+import { addNewProduct } from "./routes/product/add-product";
 import { getAllProducts } from "./routes/product/all-products";
 import { findProduct } from "./routes/product/find-product";
 import { updateProduct } from "./routes/product/update-product";
 import { deleteProduct } from "./routes/product/delete-products";
+
+import { addNewCategory } from "./routes/category/add-category";
+import { getAllCategories } from "./routes/category/all-categories";
+import { deleteCategory } from "./routes/category/delete-category";
+import { deleteSubCategory } from "./routes/category/delete-subcategory";
+import { updateCategory } from "./routes/category/update-category";
+import { updateSubCategory } from "./routes/category/update-subcategory";
+import { findCategory } from "./routes/category/find-category";
+
+import { BadRequestError } from "./errors/bad-request";
+import { errorHandler } from "./middlewares/error-handler";
+import { NotFoundError } from "./errors/not-found";
 
 const app = express();
 app.use(cors({
@@ -39,6 +49,14 @@ app.use(getAllProducts);
 app.use(findProduct);
 app.use(updateProduct);
 app.use(deleteProduct);
+ 
+app.use(addNewCategory);
+app.use(getAllCategories);
+app.use(deleteCategory);
+app.use(deleteSubCategory);
+app.use(updateCategory);
+app.use(updateSubCategory);
+app.use(findCategory);
 
 app.all('*', async (req,res) =>{
     throw new NotFoundError()

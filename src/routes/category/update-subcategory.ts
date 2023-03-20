@@ -11,7 +11,7 @@ check(["_id", "subCategory"]).notEmpty(),
 async (req:Request,res:Response)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
-       throw new RequestValidationError(errors.array())
+       throw new RequestValidationError(errors.array()) 
     }
     const {_id,subCategory} = req.body;
     const category = await Category.findByIdAndUpdate(_id, {$push:{subCategories:subCategory}}, {new:true})

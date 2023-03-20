@@ -17,6 +17,6 @@ export class RequestValidationError extends CustomError {
                 else {
                     this.message = 'Invalid credentials'
                 }
-            return  {message:error.msg, success:false, field:error.param}})
+            return  {message:this.message, success:false, field:error.param}})
     }
 }

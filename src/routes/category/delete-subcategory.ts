@@ -6,7 +6,7 @@ import { Category } from "../../models/category-model";
 
 const router = express.Router();
 
-router.patch("/api/category/delete-subcategory",
+router.delete("/api/category/delete-subcategory",
 check(["_id", "subCategory"]).notEmpty(),
 async (req:Request,res:Response)=>{
     const errors = validationResult(req);
@@ -14,9 +14,9 @@ async (req:Request,res:Response)=>{
        throw new RequestValidationError(errors.array())
     }
     const {_id,subCategory} = req.body;
-    const category = await Category.findByIdAndUpdate(_id, {$pop:{_id:subCategory._id}}, {new:true})
+    const category = await Category.findByIdAndUpdate(_id, {$pull:{subCategories:{_id:subCategory._id}}}, {new:true})
+
     .catch((err)=>{
-        console.log(err)
         throw new BadRequestError("SubCategory not updated")
     });
     res.status(200).json(category)

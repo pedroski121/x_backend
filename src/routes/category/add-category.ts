@@ -17,7 +17,6 @@ check(["name"]).notEmpty(),
     const category = new Category({...categoryDetails});
     category.save((err)=>{
         if(err){ 
-            console.log(err)
             throw new BadRequestError("Unable to save category details")
         } else { 
             res.status(201).json([{success:true, message:"saved successfully"}])

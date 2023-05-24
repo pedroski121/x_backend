@@ -8,9 +8,11 @@ interface IProductSchema {
     specification:string,
     storeID:string,
     storeName:string,
+    rating:number,
     quantity:number,
     imgURLs?:string[],
-    reviews?:{userID:string, review:string, date:string}[]
+    imgAltText?:string,
+    reviews?:{userID:string, review:string, date:string, time:string}[]
 }
 
 const ProductSchema = new mongoose.Schema<IProductSchema>({
@@ -47,11 +49,16 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
         type:String,
         required:true
     },
+    rating:{
+        type:Number
+    },
     imgURLs:[String],
+    imgAltText:String,
     reviews:[{
              userID:String,
              review:String, 
-             date:String
+             date:String,
+             time:String
         }],
 },{versionKey:false});
 

@@ -26,6 +26,7 @@ import { findCategory } from "./routes/category/find-category";
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
+import { queryProductsBasedOnCategory} from "./routes/product/query-products-based-on-category";
 
 const app = express();
 app.use(cors({
@@ -57,6 +58,7 @@ app.use(deleteSubCategory);
 app.use(updateCategory);
 app.use(updateSubCategory);
 app.use(findCategory);
+app.use(queryProductsBasedOnCategory);
 
 app.all('*', async (req,res) =>{
     throw new NotFoundError()

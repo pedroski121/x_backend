@@ -9,6 +9,9 @@ import {signUpRouter} from './routes/auth/sign-up'
 import { signInRouter } from "./routes/auth/sign-in";
 import { getCurrentUser } from "./routes/auth/current-user";
 
+import { getAllUsers } from "./routes/user/all-user";
+
+
 import { addNewProduct } from "./routes/product/add-product";
 import { getAllProducts } from "./routes/product/all-products";
 import { findProduct } from "./routes/product/find-product";
@@ -44,6 +47,8 @@ app.use(cookieSession({
 app.use(signUpRouter);
 app.use(signInRouter);
 app.use(getCurrentUser);
+
+app.use(getAllUsers);
 
 app.use(addNewProduct);
 app.use(getAllProducts);
@@ -82,7 +87,7 @@ const start = async () => {
         
     } catch (error) {
         console.log('could not start up server')
-    }
+    } 
 }
 start()
 

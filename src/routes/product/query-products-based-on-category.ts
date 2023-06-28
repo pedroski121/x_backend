@@ -11,5 +11,5 @@ async (req:Request,res:Response)=>{
     });
     res.status(200).json(productsInCategory) 
 })
-
-export {router as queryProductsBasedOnCategory}
+ 
+export {router as queryProductsBasedOnCategory} 

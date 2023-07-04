@@ -30,6 +30,7 @@ import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
 import { queryProductsBasedOnCategory} from "./routes/product/query-products-based-on-category";
+import { userCount } from "./routes/user/count-user";
 
 const app = express();
 app.use(cors({
@@ -49,6 +50,7 @@ app.use(signInRouter);
 app.use(getCurrentUser);
 
 app.use(getAllUsers);
+app.use(userCount);
 
 app.use(addNewProduct);
 app.use(getAllProducts);

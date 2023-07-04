@@ -5,18 +5,13 @@ import { User } from "../../models/user-model";
 
 
 const router = express.Router();
-router.get("/api/user/all",
+router.get("/api/user/count",
 async (req:Request,res:Response)=>{
-    const {page = 1, limit=30} = req.query
-    const allUsers = await User.find({})
-    .select('fullName email')
-    .limit(Number(limit))
-    .skip((Number(page) - 1) * Number(limit))
+    const userCount = await User.countDocuments({})
     .catch((err)=>{
         throw new BadRequestError("Users could not be fetched")
     });
-    
-    res.status(200).json(allUsers)
+    res.status(200).json({userCount})
 })
 
-export {router as getAllUsers}
+export {router as userCount}

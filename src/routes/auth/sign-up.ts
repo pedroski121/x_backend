@@ -16,7 +16,7 @@ async (req:Request, res:Response )=>{
     if(!errors.isEmpty()) { 
         throw new RequestValidationError(errors.array());
     }
-    const fullName:string = req.body.fullName;
+    const fullName:string = req.body.fullName; 
     const email:string = req.body.email;
     const password:string = req.body.password;
     const existingUser = await User.findOne({email});

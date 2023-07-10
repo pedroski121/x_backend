@@ -31,7 +31,7 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     },
     subCategory:{
         type:String,
-        required:true
+        required:true 
     },
     specification:{
         type:String,

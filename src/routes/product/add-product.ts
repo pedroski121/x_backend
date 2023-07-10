@@ -14,7 +14,7 @@ check(["price","quantity"]).isInt({gt:0}),
     if(!errors.isEmpty()){
         let errorsArray = errors.array()
         errorsArray.map((error)=>{
-            if(error.param == "price"){
+            if(error.param == "price"){ 
                 error.msg = "The price should not be less than 1"
             }
             if(error.param == "quantity"){
@@ -27,6 +27,7 @@ check(["price","quantity"]).isInt({gt:0}),
     const product = new Product({...productDetails});
     product.save((err)=>{
         if(err){ 
+            console.log(err)
             throw new BadRequestError("Unable to save product details")
         } else {
             res.status(201).json([{success:true, message:"saved successfully"}])

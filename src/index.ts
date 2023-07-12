@@ -26,6 +26,8 @@ import { updateCategory } from "./routes/category/update-category";
 import { updateSubCategory } from "./routes/category/update-subcategory";
 import { findCategory } from "./routes/category/find-category";
 
+import { addNewSubCategory } from "./routes/sub-category/add-sub-category";
+
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
@@ -66,6 +68,8 @@ app.use(updateCategory);
 app.use(updateSubCategory);
 app.use(findCategory);
 app.use(queryProductsBasedOnCategory);
+
+app.use(addNewSubCategory)
 
 app.all('*', async (req,res) =>{
     throw new NotFoundError()

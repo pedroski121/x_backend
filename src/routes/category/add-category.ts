@@ -7,7 +7,7 @@ import { Category } from "../../models/category-model";
 const router = express.Router();
 
 router.post('/api/category/add',
-check(["name"]).notEmpty(),
+check(["name"], check(["imgURL"])).notEmpty(),
 (req:Request,res:Response)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){

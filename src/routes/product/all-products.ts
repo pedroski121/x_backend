@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.get("/api/product/all",
 async (req:Request,res:Response)=>{
-    const allProducts = await Product.find({})
+    const allProducts = await Product.find()
+    .sort({_id:-1})
     .catch((err)=>{
         throw new BadRequestError("The products could not be fetched")
     });

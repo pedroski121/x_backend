@@ -16,7 +16,6 @@ async (req:Request,res:Response)=>{
     const categoryDetails = req.body;
     const category = await Category.findByIdAndUpdate(categoryDetails._id,categoryDetails,{new:true})
     .catch((err)=>{
-        console.log(err)
         throw new BadRequestError("Category not updated")
     });
     res.status(200).json(category)

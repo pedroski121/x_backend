@@ -3,12 +3,13 @@ import {check, validationResult} from "express-validator";
 import { RequestValidationError } from "../../errors/request-validation-error";
 import { BadRequestError } from "../../errors/bad-request";
 import { SubCategory } from "../../models/sub-category-model";
+import { ISubCategorySchema } from "../../models/sub-category-model";
 
 const router = express.Router();
 
 router.post('/api/sub-category/add',
 check(["name", "imgURL", "altImgText", "categoryName"]).notEmpty(),
-(req:Request,res:Response)=>{
+async (req:Request,res:Response)=>{
     const errors = validationResult(req); 
     if(!errors.isEmpty()){
         let errorsArray = errors.array()
@@ -28,8 +29,13 @@ check(["name", "imgURL", "altImgText", "categoryName"]).notEmpty(),
         })
         throw new RequestValidationError(errorsArray);
     }
-    const {...newSubCategory} = req.body;
+    const {...newSubCategory}:ISubCategorySchema = req.body;
+    const existingSubCategory = await SubCategory.findOne({name:newSubCategory.name})
+    if(existingSubCategory && existingSubCategory.categoryName === newSubCategory.categoryName ){
+       throw new BadRequestError(`This sub-category already exists in the ${newSubCategory.categoryName} category`)
+    }
     const subCategory = new SubCategory({...newSubCategory});
+
     subCategory.save((err)=>{
         if(err){ 
             throw new BadRequestError("Unable to create new subCategory")

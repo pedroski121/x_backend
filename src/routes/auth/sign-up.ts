@@ -17,7 +17,7 @@ async (req:Request, res:Response )=>{
         throw new RequestValidationError(errors.array());
     }
     const fullName:string = req.body.fullName; 
-    const email:string = req.body.email;
+    const email:string = req.body.email; 
     const password:string = req.body.password;
     const existingUser = await User.findOne({email});
     if(existingUser) {

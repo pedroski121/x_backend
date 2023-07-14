@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface ISubCategorySchema {
+export interface ISubCategorySchema {
     name:string,
     imgURL:string, 
     altImgText:string,

@@ -4,10 +4,10 @@ const router = express.Router();
 
 router.get('/api/auth/current-user',currentUser,(req:Request,res:Response)=>{
     if(req.currentUser){
-        res.send([{currentUser:req.currentUser}]);
+        res.send([{...req.currentUser, success:true}]);
     } 
     else {
-        res.send([{currentUser:null}])
+        res.send([{currentUser:null, success:false}])
     };
 })
 export {router as getCurrentUser} 

@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import  jwt  from "jsonwebtoken";
+import  jwt, {TokenExpiredError}  from "jsonwebtoken";
+import { BadRequestError } from "../errors/bad-request";
 
 interface UserPayload{
     _id:string;
     email:string;
     iat:number;
     exp:number;
-
 }
+
 declare global {
     namespace Express {
       interface Request {
@@ -25,7 +26,10 @@ const currentUser = (req:Request, res:Response, next:NextFunction) => {
         req.currentUser = payload
         next()
     } catch (err) {
-        console.log(err)
+      if(err instanceof TokenExpiredError){
+          throw new BadRequestError('Session Expired')
+      }
+      throw new BadRequestError('An error occured')
     }
 }
 export {currentUser}

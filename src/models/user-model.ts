@@ -32,7 +32,7 @@ if(!process.env.JWT_SECRET_KEY) {
     throw new BadRequestError('No secret key in environment');
 }
 const token = jwt.sign({_id, email}, process.env.JWT_SECRET_KEY, {
-    expiresIn:'1d'
+    expiresIn:'30s'
 })
 return token;
 }

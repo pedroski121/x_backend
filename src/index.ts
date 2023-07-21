@@ -93,7 +93,8 @@ const start = async () => {
             console.log(`Listening on port ${PORT}`) 
         })
         
-    } catch (error) {
+    } 
+    catch (error) {
         console.log('could not start up server')
     } 
 }

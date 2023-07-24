@@ -53,6 +53,7 @@ if(PORT === 5000) {
     app.set('trust proxy', 1); // trust first proxy
     app.use(cookieSession({
         secure:true,
+        sameSite:'none'
     }))
 }
 

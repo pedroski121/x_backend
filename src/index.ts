@@ -39,7 +39,8 @@ const app = express();
 app.use(cors({
     origin:process.env.ORIGIN,
     credentials:true, 
-    exposedHeaders:['set-cookie']
+    
+    
 }))
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000
 app.use(express.json());
@@ -55,7 +56,8 @@ if(PORT === 5000) {
     app.use(cookieSession({
         keys:[`${process.env.COOKIE_SECRET}`],
         secure:true,
-        sameSite:'none'
+        sameSite:'none', 
+        domain:process.env.ORIGIN || ''
     }))
 }
 

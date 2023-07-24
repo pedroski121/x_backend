@@ -38,7 +38,8 @@ import { userCount } from "./routes/user/count-user";
 const app = express();
 app.use(cors({
     origin:process.env.ORIGIN,
-    credentials:true
+    credentials:true, 
+    exposedHeaders:['set-cookie']
 }))
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000
 app.use(express.json());
@@ -47,13 +48,12 @@ app.set('trust proxy', 1); // trust first proxy
 
 if(PORT === 5000) {
     app.use(cookieSession({
-        
-        signed:false,
+        keys:[`${process.env.COOKIE_SECRET}`], 
         secure:false
     }))
 } else {
     app.use(cookieSession({
-        keys:[`${process.env.COOKIE_SECRET}`], 
+        keys:[`${process.env.COOKIE_SECRET}`],
         secure:true,
         sameSite:'none'
     }))

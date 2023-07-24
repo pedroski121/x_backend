@@ -57,7 +57,7 @@ if(PORT === 5000) {
         keys:[`${process.env.COOKIE_SECRET}`],
         secure:true,
         sameSite:'none', 
-        domain:'x-9fgh-git-main-obipedrodevtest-gmailcom.vercel.app'
+        domain:process.env.DOMAIN || ''
     }))
 }
 

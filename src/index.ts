@@ -45,7 +45,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set('trust proxy', 1); // trust first proxy
 app.use(cookieSession({
-    signed:false
+    signed:false,
+    secure:PORT === 5000 ? false : true,
+    sameSite:PORT === 5000 ? false : 'none'
 }))
 
 app.use(signUpRouter);

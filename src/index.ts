@@ -43,11 +43,18 @@ app.use(cors({
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000;
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.set('trust proxy', 1); // trust first proxy
-app.use(cookieSession({
-    signed:false,
-    secure:PORT === 5000 ? false : true,
-}))
+
+if(PORT === 5000) {
+    app.use(cookieSession({
+        signed:false,
+        secure: false,
+    }))
+} else {
+    app.set('trust proxy', 1); // trust first proxy
+    app.use(cookieSession({
+        secure:true,
+    }))
+}
 
 app.use(signUpRouter);
 app.use(signInRouter);

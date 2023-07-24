@@ -53,7 +53,7 @@ if(PORT === 5000) {
     }))
 } else {
     app.use(cookieSession({
-        secret:process.env.COOKIE_SECRET,
+        keys:[`${process.env.COOKIE_SECRET}`], 
         secure:true,
         sameSite:'none'
     }))

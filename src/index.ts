@@ -39,7 +39,7 @@ const app = express();
 app.use(cors({
     origin:process.env.ORIGIN,
     credentials:true, 
-    
+    exposedHeaders:[ "X-Set-Cookie"]
     
 }))
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000

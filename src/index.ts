@@ -57,7 +57,8 @@ if(PORT === 5000) {
         keys:[`${process.env.COOKIE_SECRET}`],
         secure:true,
         sameSite:'none', 
-        domain:`${process.env.DOMAIN}` || '',
+        domain:process.env.DOMAIN || '',
+        path:'/',
         httpOnly:true
     }))
 }

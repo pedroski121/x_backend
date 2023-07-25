@@ -38,9 +38,7 @@ import { userCount } from "./routes/user/count-user";
 const app = express();
 app.use(cors({
     origin:process.env.ORIGIN,
-    credentials:true, 
-    exposedHeaders:[ "X-Set-Cookie"]
-    
+    credentials:true,     
 }))
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000
 app.use(express.json());
@@ -57,9 +55,10 @@ if(PORT === 5000) {
         keys:[`${process.env.COOKIE_SECRET}`],
         secure:true,
         sameSite:'none', 
-        domain:process.env.DOMAIN || '',
-        path:'/',
-        httpOnly:true
+        // domain:process.env.DOMAIN || '',
+        // path:'/',
+        // httpOnly:true
+        maxAge: 1000 * 60 * 60
     }))
 }
 

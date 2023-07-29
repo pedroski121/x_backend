@@ -21,10 +21,6 @@ interface IUserDocument extends IUser, Document {
 }
 
 const UserSchema = new mongoose.Schema<IUserDocument>({
-    fullName: {
-        type:String,
-        required:true
-    },
     firstName:{
         type:String,
         required:true, 

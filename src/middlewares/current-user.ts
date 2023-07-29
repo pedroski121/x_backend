@@ -21,7 +21,6 @@ const currentUser = (req:Request, res:Response, next:NextFunction) => {
        return next()
     }
     try {
-
         const payload =  jwt.verify(req.session.jwt_token,process.env.JWT_SECRET_KEY) as UserPayload
         req.currentUser = payload
         next()

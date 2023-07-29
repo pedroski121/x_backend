@@ -5,8 +5,6 @@ import cookieSession from 'cookie-session';
 import 'express-async-errors'
 import 'dotenv/config'
 
-import { getAllUsers } from "./routes/user/all-user";
-
 import { addNewSubCategory } from "./routes/sub-category/add-sub-category";
 import { getAllSubCategories } from "./routes/sub-category/all-sub-categories";
 
@@ -19,6 +17,7 @@ import { userCount } from "./routes/user/count-user";
 import { authRoutes } from "./routes/authRoute";
 import { categoryRoutes } from "./routes/categoryRoute";
 import { productRoutes } from "./routes/productRoute";
+import { userRoutes } from "./routes/userRoutes";
 const app = express();
 app.use(cors({
     origin:process.env.ORIGIN,
@@ -50,8 +49,9 @@ app.set('trust proxy', 1); // trust first proxy
 app.use(authRoutes)
 app.use(categoryRoutes)
 app.use(productRoutes)
+app.use(userRoutes)
 
-app.use(getAllUsers);
+// app.use(getAllUsers);
 app.use(userCount);
 
 

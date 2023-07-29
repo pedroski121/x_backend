@@ -1,5 +1,5 @@
 import express,{ Request, Response } from "express";
-import {check, validationResult} from "express-validator";
+import { validationResult} from "express-validator";
 import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request";
 import { Product } from "../models/product-model";

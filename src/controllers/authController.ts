@@ -8,7 +8,8 @@ import bcrypt from 'bcrypt';
 // controller to get the current user
 export const getCurrentUser =(req:Request,res:Response)=>{
     if(req.currentUser){
-        res.send([{...req.currentUser, success:true}]);
+        const {_id} = req.currentUser
+        res.send([{currentUser:{_id}, success:true}]);
     } 
     else {
         res.send([{currentUser:null, success:false}])
@@ -45,16 +46,13 @@ export const signUp = async (req:Request, res:Response) => {
     if(!errors.isEmpty()) { 
         throw new RequestValidationError(errors.array());
     }
-    const fullName:string = req.body.fullName; 
-    const email:string = req.body.email; 
-    const password:string = req.body.password;
+    const {firstName, lastName, email, password} = req.body
     const existingUser = await User.findOne({email});
     if(existingUser) {
         throw new BadRequestError('Account already exists');
     }
     const hashedPassword = await bcrypt.hash(password,10);
-    const user = new User({fullName, email,password:hashedPassword});
-
+    const user = new User({firstName, lastName, email, password:hashedPassword});
     user.save((err)=>{
             if(err){
                  throw new BadRequestError('An error occured while saving the new user crendentials');

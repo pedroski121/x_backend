@@ -46,18 +46,18 @@ export const signUp = async (req:Request, res:Response) => {
     if(!errors.isEmpty()) { 
         throw new RequestValidationError(errors.array());
     }
-    const {firstName, lastName, email, password} = req.body
-    const existingUser = await User.findOne({email});
+    const newUser = req.body
+    const existingUser = await User.findOne({email:newUser.email});
     if(existingUser) {
         throw new BadRequestError('Account already exists');
     }
-    const hashedPassword = await bcrypt.hash(password,10);
-    const user = new User({firstName, lastName, email, password:hashedPassword});
-    user.save((err)=>{
-            if(err){
-                 throw new BadRequestError('An error occured while saving the new user crendentials');
-            } else {
-                res.status(201).json([{success:true, message:'Registration successful'}]);
-            }
-        })
+    const hashedPassword = await bcrypt.hash(newUser.password,10);
+    const user = new User({...newUser, password:hashedPassword});
+    try {
+        user.save()
+        res.status(201).json([{success:true, message:'Registration successful'}]); 
+    } catch (error) {
+        throw new BadRequestError('An error occured while trying to save the user details')
+    }
+
 }

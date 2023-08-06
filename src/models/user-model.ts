@@ -4,7 +4,6 @@ import { BadRequestError } from "../errors/bad-request";
 import 'dotenv/config'
 
 interface IUser {
-    fullName : string,
     firstName:string, 
     lastName:string,
     email : string,
@@ -13,7 +12,7 @@ interface IUser {
     additionalPhoneNumber:number,
     address1:string,
     address2:string, 
-    state:string,
+    state:string, 
     city:string
 }
 interface IUserDocument extends IUser, Document {

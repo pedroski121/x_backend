@@ -2,8 +2,24 @@ import {Request, Response} from 'express';
 import { BadRequestError } from '../errors/bad-request';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { User } from '../models/user-model';
-import { validationResult } from 'express-validator';
+import { validationResult, ValidationError} from 'express-validator';
 import bcrypt from 'bcrypt';
+
+
+const errorsArray = (errors:ValidationError[]):ValidationError[] =>{
+    errors.map((error)=>{
+        if(error.param === 'password'){
+            error.msg = 'Password should have a minimum of 5 characters'
+        } else if(error.param === 'fullName') {
+            error.msg ='Full Name should have a minimum of 2 characters '
+        } 
+        else {
+            error.msg = 'Invalid credentials'
+        }
+       })
+       return errors
+}
+
 
 // controller to get the current user
 export const getCurrentUser =(req:Request,res:Response)=>{
@@ -21,7 +37,8 @@ export const getCurrentUser =(req:Request,res:Response)=>{
 export const signIn = async (req:Request, res:Response) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array()); 
+        const allErrors = errorsArray(errors.array())
+        throw new RequestValidationError(allErrors); 
     }
     const email:string = req.body.email;
     const password:string = req.body.password;
@@ -44,7 +61,8 @@ export const signIn = async (req:Request, res:Response) => {
 export const signUp = async (req:Request, res:Response) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) { 
-        throw new RequestValidationError(errors.array());
+        const allErrors = errorsArray(errors.array())
+        throw new RequestValidationError(allErrors);
     }
     const newUser = req.body
     const existingUser = await User.findOne({email:newUser.email});
@@ -61,3 +79,5 @@ export const signUp = async (req:Request, res:Response) => {
     }
 
 }
+
+

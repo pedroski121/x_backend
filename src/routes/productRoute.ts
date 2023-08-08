@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, check } from 'express-validator';
-import { addProduct,deleteProduct, getProducts, getProduct,updateProduct } from '../controllers/productController';
+import { addProduct, deleteProduct, getProducts, getProduct,updateProduct } from '../controllers/productController';
 
 
 const router = express.Router();

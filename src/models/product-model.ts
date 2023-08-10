@@ -10,7 +10,7 @@ interface IProductSchema {
     storeName:string,
     rating:number,
     quantity:number,
-    imgURLs?:string[],
+    imgURLs?:string[], 
     imgAltText?:string,
     reviews?:{userID:string, review:string, date:string, time:string}[]
 }

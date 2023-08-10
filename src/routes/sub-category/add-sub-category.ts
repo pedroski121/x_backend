@@ -18,7 +18,7 @@ async (req:Request,res:Response)=>{
                 error.msg = "An Image for this Sub category should be created"
             }
             if(error.param == "name"){
-                error.msg="There is no name for this sub category"
+               error.msg="There is no name for this sub category"
             }
             if(error.param == "categoryName"){
                 error.msg="There is no name set for the category this sub-category belong to"

@@ -18,7 +18,6 @@ export const getUsers = async (req:Request,res:Response)=>{
     
     res.status(200).json(allUsers)
 }
-
 // controller to fetch the user count
 export const getUserCount = async (req:Request,res:Response)=>{
     const userCount = await User.countDocuments({})
@@ -27,7 +26,6 @@ export const getUserCount = async (req:Request,res:Response)=>{
     });
     res.status(200).json({userCount})
 }
-
 
 // controller to fetch a logged in user details
 export const getUserDetails = async (req:Request, res:Response) => {
@@ -59,7 +57,7 @@ export const updateUserDetails = async (req:Request, res:Response) => {
        throw new RequestValidationError(errorsArray)
     }
     await User.findByIdAndUpdate(userID,userDetails,{new:true})
-    .then((user)=>{
+    .then(()=>{
         res.send([{message:'user details updated successfully', success:true}])
     })
     .catch(()=>{

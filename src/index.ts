@@ -12,12 +12,13 @@ import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
 import { queryProductsBasedOnCategory} from "./routes/product/query-products-based-on-category";
-import { userCount } from "./routes/user/count-user";
 
 import { authRoutes } from "./routes/authRoute";
 import { categoryRoutes } from "./routes/categoryRoute";
 import { productRoutes } from "./routes/productRoute";
 import { userRoutes } from "./routes/userRoutes";
+import { wishListRoutes } from "./routes/wishListRoute";
+
 const app = express();
 app.use(cors({
     origin:process.env.ORIGIN,
@@ -50,10 +51,7 @@ app.use(authRoutes)
 app.use(categoryRoutes)
 app.use(productRoutes)
 app.use(userRoutes)
-
-// app.use(getAllUsers);
-app.use(userCount);
-
+app.use(wishListRoutes)
 
 app.use(queryProductsBasedOnCategory);
 

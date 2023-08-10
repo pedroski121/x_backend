@@ -13,7 +13,7 @@ interface IUser {
     address1:string,
     address2:string, 
     state:string, 
-    city:string
+    city:string, 
 }
 interface IUserDocument extends IUser, Document {
     generateAuthToken:(_id:string, email:string) => string; 

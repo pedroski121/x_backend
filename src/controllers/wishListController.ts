@@ -3,7 +3,7 @@ import { WishList } from '../models/wishlist-model'
 import { ServerError } from '../errors/server-error'
 import { BadRequestError } from '../errors/bad-request'
 import { IWishList } from '../types/wishlist'
-
+import { Product } from '../models/product-model'
 
 // get wishlist
 export const getWishList = async (req:Request, res:Response) => {
@@ -28,28 +28,38 @@ export const getWishList = async (req:Request, res:Response) => {
 // add new wishlist
 export const addNewWishItem = async (req:Request, res:Response) => {
     const {...wish} = req.body;
-    if(req.currentUser) {
-        const {_id} = req.currentUser
-        if(wish.userID === _id ) { 
+    if(req.currentUser?._id === wish.userID) {
             const wishlist = new WishList(wish);
             const wishExist:IWishList[] =  await WishList.find({productID:wish.productID, userID:wish.userID})
-            if(!wishExist.length){
+            const productExist = await Product.find({_id:wish.productID})
+            if(!wishExist.length && !!productExist){
                 await wishlist.save().catch((err)=>{
                     throw new BadRequestError('Error saving wish')
                 })
                 res.status(200).json([{message:'Wish added', success:true}])
             }
             else {
-                await WishList.findOneAndDelete({userID:wish.userID, productID:wish.productID})
-                res.status(200).json([{message:'Wish removed', success:false}]) 
-            }
-        } else {
-            throw new BadRequestError('Not Authorized')
-        }
-    } 
-    else{
+                throw new BadRequestError('Wish already exist')
+            } 
+    } else{
         throw new BadRequestError('Not authorized')
+    }
+}
+
+// delete wish item
+export const deleteWishListItem = async (req:Request, res:Response) => {
+    const {...wish} = req.body
+    if(req.currentUser?._id === wish.userID){
+        await WishList.findOneAndDelete({userID:wish.userID, productID:wish.productID})
+        .then(()=>{
+            res.status(200).json([{message:'Wish Removed', success:true}])
+        })
+        .catch(()=>{
+            throw new ServerError('An error occured deleting the wish')
+        })
+    }
+    else {
+        throw new BadRequestError('Not Authorized')
 
     }
-    
 }

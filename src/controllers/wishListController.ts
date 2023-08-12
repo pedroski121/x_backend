@@ -49,10 +49,14 @@ export const addNewWishItem = async (req:Request, res:Response) => {
 // delete wish item
 export const deleteWishListItem = async (req:Request, res:Response) => {
     const {...wish} = req.body
-    if(req.currentUser?._id === wish.userID){
-        await WishList.findOneAndDelete({userID:wish.userID, productID:wish.productID})
-        .then(()=>{
-            res.status(200).json([{message:'Wish Removed', success:true}])
+    if(req.currentUser){
+        await WishList.findOneAndDelete({userID:req.currentUser._id, productID:wish.productID})
+        .then((wish)=>{
+            if(!wish) {
+                res.status(404).json([{message:"Wish doesn't exist", success:false}])
+            } else {
+                res.status(200).json([{message:'Wish Removed', success:true}])
+            }
         })
         .catch(()=>{
             throw new ServerError('An error occured deleting the wish')

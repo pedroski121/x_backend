@@ -10,6 +10,7 @@ interface IProductSchema {
     storeName:string,
     rating:number,
     quantity:number,
+    size:string[],
     imgURLs?:string[], 
     imgAltText?:string,
     reviews?:{userID:string, review:string, date:string, time:string}[]
@@ -35,6 +36,10 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     },
     specification:{
         type:String,
+        required:true
+    },
+    size:{
+        type:[String],
         required:true
     },
     quantity: {

@@ -30,7 +30,7 @@ export const addNewWishItem = async (req:Request, res:Response) => {
     const {...wish} = req.body;
     if(req.currentUser?._id === wish.userID) {
             const wishlist = new WishList(wish);
-            const wishExist:IWishList[] =  await WishList.find({productID:wish.productID, userID:wish.userID})
+            const wishExist:IWishList[] =  await WishList.find({productID:wish.productID, userID:req.currentUser?._id})
             const productExist = await Product.find({_id:wish.productID})
             if(!wishExist.length && !!productExist){
                 await wishlist.save().catch((err)=>{
@@ -63,6 +63,7 @@ export const deleteWishListItem = async (req:Request, res:Response) => {
         })
     }
     else {
+        
         throw new BadRequestError('Not Authorized')
 
     }

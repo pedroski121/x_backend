@@ -28,23 +28,22 @@ const PORT:number = parseInt(`${process.env.PORT}`) || 5000
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set('trust proxy', 1); // trust first proxy
+
+if(PORT === 5000) {
     app.use(cookieSession({
         keys:[`${process.env.COOKIE_SECRET}`], 
         secure:false
     }))
-// if(PORT === 5000) {
-
-// } else {
-//     app.use(cookieSession({
-//         keys:[`${process.env.COOKIE_SECRET}`],
-//         secure:true,
-//         sameSite:'none', 
-//         // domain:process.env.DOMAIN || '',
-//         // path:'/',
-//         // httpOnly:true
-//         maxAge: 1000 * 60 * 60
-//     }))
-// }
+} else {
+    app.use(cookieSession({
+        keys:[`${process.env.COOKIE_SECRET}`],
+        secure:true,
+        sameSite:'strict', 
+        domain:process.env.DOMAIN || '',
+        path:'/',
+        httpOnly:true,
+    }))
+}
 
 
 app.use(authRoutes)

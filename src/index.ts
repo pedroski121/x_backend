@@ -38,7 +38,7 @@ if(PORT === 5000) {
     app.use(cookieSession({
         keys:[`${process.env.COOKIE_SECRET}`],
         secure:true,
-        sameSite:'strict', 
+        sameSite:'none', 
         domain:process.env.DOMAIN || '',
         path:'/',
         httpOnly:true,

@@ -10,9 +10,13 @@ const errorsArray = (errors:ValidationError[]):ValidationError[] =>{
     errors.map((error)=>{
         if(error.param === 'password'){
             error.msg = 'Password should have a minimum of 5 characters'
-        } else if(error.param === 'fullName') {
-            error.msg ='Full Name should have a minimum of 2 characters '
-        } 
+        } else if(error.param === 'firstName') {
+            error.msg ='First Name should have a minimum of 1 character'
+        } else if(error.param === 'lastName') {
+            error.msg = "Last Name should have a minimum of 1 character"
+        } else if(error.param === 'email'){
+            error.msg = "Email address is not valid"
+        }
         else {
             error.msg = 'Invalid credentials'
         }

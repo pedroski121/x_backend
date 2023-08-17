@@ -11,7 +11,7 @@ router.post('/api/auth/sign-in', body('email').isEmail(),body('password').isLeng
 router.post('/api/auth/sign-up', 
      body('email').isEmail(),
      body('password').isLength({min:5}),
-     body('lastName'),
+     body('lastName').isLength({min:1}),
      body('firstName').isLength({min:1}),
      signUp
 )

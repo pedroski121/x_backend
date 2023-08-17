@@ -21,7 +21,7 @@ import { wishListRoutes } from "./routes/wishListRoute";
 
 const app = express();
 app.use(cors({
-    origin:process.env.ORIGIN,
+    origin:[`${process.env.PROD_ORIGIN}`, `${process.env.DEV_ORIGIN}`],
     credentials:true,     
 }))
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000
@@ -40,7 +40,6 @@ if(PORT === 5000) {
         secure:true,
         sameSite:'none', 
         domain:process.env.DOMAIN || '',
-        path:'/',
         httpOnly:true,
     }))
 }

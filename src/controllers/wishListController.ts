@@ -24,7 +24,7 @@ export const getWishList = async (req:Request, res:Response) => {
         throw new BadRequestError('Not Authorized')
     }    
 }
-
+ 
 // add new wishlist
 export const addNewWishItem = async (req:Request, res:Response) => {
     const {...wish} = req.body;

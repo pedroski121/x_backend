@@ -5,9 +5,6 @@ import cookieSession from 'cookie-session';
 import 'express-async-errors'
 import 'dotenv/config'
 
-import { addNewSubCategory } from "./routes/sub-category/add-sub-category";
-import { getAllSubCategories } from "./routes/sub-category/all-sub-categories";
-
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
@@ -15,6 +12,7 @@ import { queryProductsBasedOnCategory} from "./routes/product/query-products-bas
 
 import { authRoutes } from "./routes/authRoute";
 import { categoryRoutes } from "./routes/categoryRoute";
+import { subCategoryRoutes } from "./routes/subCategoryRoute";
 import { productRoutes } from "./routes/productRoute";
 import { userRoutes } from "./routes/userRoutes";
 import { wishListRoutes } from "./routes/wishListRoute";
@@ -50,11 +48,12 @@ app.use(categoryRoutes)
 app.use(productRoutes)
 app.use(userRoutes)
 app.use(wishListRoutes)
+app.use(subCategoryRoutes)
+
+
 
 app.use(queryProductsBasedOnCategory);
 
-app.use(addNewSubCategory)
-app.use(getAllSubCategories)
 
 app.all('*', async (req,res) =>{
     throw new NotFoundError()

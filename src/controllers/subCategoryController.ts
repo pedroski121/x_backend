@@ -1,15 +1,14 @@
-import express,{ Request, Response } from "express";
-import {check, validationResult} from "express-validator";
-import { RequestValidationError } from "../../errors/request-validation-error";
-import { BadRequestError } from "../../errors/bad-request";
-import { SubCategory } from "../../models/sub-category-model";
-import { ISubCategorySchema } from "../../models/sub-category-model";
+import { Request, Response } from "express";
+import {validationResult} from "express-validator";
+import { RequestValidationError } from "../errors/request-validation-error";
+import { BadRequestError } from "../errors/bad-request";
+import { SubCategory } from "../models/sub-category-model";
+import { ISubCategorySchema } from "../models/sub-category-model";
 
-const router = express.Router();
 
-router.post('/api/sub-category/add',
-check(["name", "imgURL", "altImgText", "categoryName"]).notEmpty(),
-async (req:Request,res:Response)=>{
+
+// controller to create a new sub-category
+export const addSubCategory = async  (req:Request, res:Response) =>{
     const errors = validationResult(req); 
     if(!errors.isEmpty()){
         let errorsArray = errors.array()
@@ -43,7 +42,28 @@ async (req:Request,res:Response)=>{
             res.status(201).json([{success:true, message:"New Sub Category Created"}])
         }
     })
+}
 
-});
+// controller to get all sub-categories
+export const getAllSubCategories = async (req:Request,res:Response) =>{
+    const allSubCategories = await SubCategory.find({})
+    .catch((err)=>{
+        throw new BadRequestError("The sub-categories could not be fetched")
+    });
+    res.status(200).json(allSubCategories)
+}
 
-export {router as addNewSubCategory}
+
+// controller to fetch all the sub-categories for a specific category
+export const getCategorySubCategories = async (req:Request,res:Response)=>{
+    const {page = 1, limit=10} = req.query
+    const categoryName = req.params.categoryName
+    const subCategories = await SubCategory.find({categoryName:req.params.categoryName})
+        .limit(Number(limit))
+        .skip((Number(page) - 1) * Number(limit))
+    .catch((err)=>{
+        throw new BadRequestError("The sub-categories could not be fetched")
+    });
+
+        res.status(200).json({categoryName, subCategories})    
+}

@@ -4,7 +4,8 @@ export interface ISubCategorySchema {
     name:string,
     imgURL:string, 
     altImgText:string,
-    categoryName:string
+    categoryName:string, 
+    categoryID:string,
 }
 
 const SubCategorySchema = new mongoose.Schema<ISubCategorySchema>({
@@ -23,6 +24,10 @@ const SubCategorySchema = new mongoose.Schema<ISubCategorySchema>({
   categoryName:{
     type:String,
     required:true,
+  }, 
+  categoryID:{
+    type:String, 
+    required:false
   }
 
 },{versionKey:false});

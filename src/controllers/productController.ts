@@ -1,10 +1,9 @@
-import express,{ Request, Response } from "express";
+import { Request, Response } from "express";
 import { validationResult} from "express-validator";
 import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request";
 import { Product } from "../models/product-model";
 
-const router = express.Router();
 
 // controller to add a new product 
 export const addProduct = (req:Request,res:Response)=>{
@@ -25,7 +24,6 @@ export const addProduct = (req:Request,res:Response)=>{
     const product = new Product({...productDetails});
     product.save((err)=>{
         if(err){ 
-            console.log(err)
             throw new BadRequestError("Unable to save product details")
         } else {
             res.status(201).json([{success:true, message:"saved successfully"}])
@@ -43,16 +41,6 @@ export const getProducts = async (req:Request,res:Response)=>{
     res.status(200).json(allProducts)
 }
 
-router.get("/api/product/:id",
-async (req:Request,res:Response)=>{
-    const productID = req.params.id;
-    const product = await Product.findById(productID)
-    .catch((err)=>{
-        throw new BadRequestError("Product could not be found")
-    });
-    
-    res.status(200).json(product);
-})
 
 
 // controller to get a single product using the product id
@@ -60,10 +48,27 @@ export const getProduct = async (req:Request,res:Response)=>{
     const productID = req.params.id;
     const product = await Product.findById(productID)
     .catch((err)=>{
-        throw new BadRequestError("Product could not be found")
+        throw new BadRequestError("Error fetching products")
     });
     
     res.status(200).json(product);
+}
+// controller to get products for a particular sub-category and category 
+export const getCategoryProducts = async  (req:Request, res:Response) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+       throw new RequestValidationError(errors.array())
+    }
+    const {category, subCategory} = req.params
+    const {page=1, limit=10} = req.query
+    const products = await Product.find({category, subCategory})
+    .limit(Number(limit))
+    .skip((Number(page) - 1) * Number(limit))
+        .catch(()=>{
+            throw new BadRequestError('Error fetching products')
+        })
+    res.status(200).send({subCategory, products})
+
 }
 
 
@@ -83,7 +88,6 @@ export const updateProduct = async (req:Request,res:Response)=>{
 }
 
 // controller to delete product 
-
 export const deleteProduct =async  (req:Request, res: Response) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){

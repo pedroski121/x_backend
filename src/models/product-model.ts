@@ -1,22 +1,8 @@
 import mongoose from "mongoose";
+import { TProduct } from "../types/product";
 
-interface IProductSchema {
-    name:string,
-    price:number,
-    category:string,
-    subCategory:string,
-    specification:string,
-    storeID:string,
-    storeName:string,
-    rating:number,
-    quantity:number,
-    size:string[],
-    imgURLs?:string[], 
-    imgAltText?:string,
-    reviews?:{userID:string, review:string, date:string, time:string}[]
-}
 
-const ProductSchema = new mongoose.Schema<IProductSchema>({
+const ProductSchema = new mongoose.Schema<TProduct>({
     name:{
         type:String,
         required:true
@@ -27,7 +13,7 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     },
     category:{
         type:String,
-        enum: ["men","women","children","okrika","unisex"],
+        enum: ["men","women","children","okirika","unisex"],
         required:true
     },
     subCategory:{
@@ -38,7 +24,7 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
         type:String,
         required:true
     },
-    size:{
+    sizes:{
         type:[String],
         required:true
     },

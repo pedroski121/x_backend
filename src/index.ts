@@ -8,7 +8,6 @@ import 'dotenv/config'
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
-import { queryProductsBasedOnCategory} from "./routes/product/query-products-based-on-category";
 
 import { authRoutes } from "./routes/authRoute";
 import { categoryRoutes } from "./routes/categoryRoute";
@@ -16,6 +15,7 @@ import { subCategoryRoutes } from "./routes/subCategoryRoute";
 import { productRoutes } from "./routes/productRoute";
 import { userRoutes } from "./routes/userRoutes";
 import { wishListRoutes } from "./routes/wishListRoute";
+import { bagRoutes } from "./routes/bagRoute";
 
 const app = express();
 app.use(cors({
@@ -49,13 +49,12 @@ app.use(productRoutes)
 app.use(userRoutes)
 app.use(wishListRoutes)
 app.use(subCategoryRoutes)
+app.use(bagRoutes)
 
 
 
-app.use(queryProductsBasedOnCategory);
 
-
-app.all('*', async (req,res) =>{
+app.all('*', async () =>{
     throw new NotFoundError()
 })
 app.use(errorHandler);

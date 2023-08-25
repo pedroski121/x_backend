@@ -42,10 +42,10 @@ export const addNewbagItem = async (req:BagBody<TBag>, res:Response) => {
             const productExist = await Product.find({_id:bag.productID})
             .then((productItem)=>{
                 if(productItem[0].quantity < bag.quantity){
-                    throw new BadRequestError('Quantity not available')
+                    throw new BadRequestError('Quantity too much')
                 }
                 return productItem  
-            }).catch(()=>{
+            }).catch((err)=>{
                 throw new ServerError('Server error')
             })
      
@@ -53,11 +53,11 @@ export const addNewbagItem = async (req:BagBody<TBag>, res:Response) => {
                 const baglist = new Bag({...bag, userID});
                 await baglist.save().catch(()=>{
                     throw new BadRequestError('Error saving bag item')
-                })
+                }) 
                 res.status(200).json([{message:'new item added to bag', success:true}])
             }
             else {
-                throw new BadRequestError('item already in already exist')
+                throw new BadRequestError('item already in bag')
             } 
     } else{
         throw new BadRequestError('Not authorized')
@@ -78,6 +78,27 @@ export const deleteBagItem = async (req:Request, res:Response) => {
         })
         .catch(()=>{
             throw new ServerError('Bag item not deleted')
+        })
+    }
+    else {
+        
+        throw new BadRequestError('Not Authorized')
+
+    }
+}
+
+export const emptyBag = async (req:Request, res:Response) =>{
+    if(req.currentUser){
+        await Bag.deleteMany({userID:req.currentUser._id})
+        .then((bag)=>{
+            if(bag.deletedCount === 0) {
+                res.status(404).json([{message:"bag already empty", success:false}])
+            } else {
+                res.status(200).json([{message:'all items in bag removed', success:true}])
+            }
+        })
+        .catch(()=>{
+            throw new ServerError('Error deleting bag')
         })
     }
     else {

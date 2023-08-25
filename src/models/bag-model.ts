@@ -7,10 +7,6 @@ const BagSchema = new mongoose.Schema<TBag>({
         required:true,
         type:String
     },
-    userID:{
-        required:true, 
-        type:String,
-    },
     quantity:{
         required:true,
         type:Number
@@ -18,7 +14,12 @@ const BagSchema = new mongoose.Schema<TBag>({
     size:{
         required:true, 
         type:String
+    }, 
+    userID:{
+        required:true, 
+        type:String
     }
+
 }, {collection:'bag', versionKey:false})
 
 const Bag = mongoose.model('Bag',BagSchema)

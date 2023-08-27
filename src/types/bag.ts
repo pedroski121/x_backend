@@ -5,7 +5,7 @@ export type TBag = {
     quantity:number,
     size:string,
     _id:string,
-    userID:string
+    userID?:string
 }
 
 export interface BagBody<T> extends Request {

@@ -12,7 +12,7 @@ const BagSchema = new mongoose.Schema<TBag>({
         type:Number
     }, 
     size:{
-        required:true, 
+        required:false, 
         type:String
     }, 
     userID:{

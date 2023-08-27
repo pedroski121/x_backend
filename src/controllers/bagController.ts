@@ -45,16 +45,23 @@ export const addNewbagItem = async (req:BagBody<TBag>, res:Response) => {
                     throw new BadRequestError('Quantity too much')
                 }
                 return productItem  
-            }).catch((err)=>{
+            }).catch(()=>{
                 throw new ServerError('Server error')
             })
      
             if(!bagExist.length && !!productExist){
                 const baglist = new Bag({...bag, userID});
-                await baglist.save().catch(()=>{
+               let item =  await baglist.save()
+               .then((response)=>{
+                let responseObj = response.toObject()
+                delete responseObj.userID  
+                return responseObj
+               })
+               .catch(()=>{
                     throw new BadRequestError('Error saving bag item')
-                }) 
-                res.status(200).json([{message:'new item added to bag', success:true}])
+                })
+                         
+                res.status(200).json(item)
             }
             else {
                 throw new BadRequestError('item already in bag')

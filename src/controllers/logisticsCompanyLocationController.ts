@@ -4,6 +4,7 @@ import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request";
 import { LogisticsCompanyLocations } from "../models/logistics-company-location-model";
 import { ServerError } from "../errors/server-error";
+import { toTitleCase } from "../utils/toTitleCase";
 
 // controller to add a new product 
 export const addLogisticsCompanyLocation =  (req:Request,res:Response)=>{
@@ -32,7 +33,7 @@ export const addLogisticsCompanyLocation =  (req:Request,res:Response)=>{
         if(err){ 
             const error = new ServerError("Unable to save this company details");
             console.error(err)
-            res.status(201).json({success:false, message:error.message})
+            res.status(500).json({success:false, message:error.message})
         } else {
             res.status(201).json({success:true, message:"saved successfully"})
         }
@@ -47,4 +48,17 @@ export const getLogisticsCompanyLocations = async (req:Request,res:Response)=>{
         throw new BadRequestError("The locations could not be fetched")
     });
     res.status(200).json(allLogisticsLocations)
+}
+
+
+export const getLogisticsCompanyLocationsInState = async (req:Request, res:Response) => {
+    const state = toTitleCase(req.params.state);
+    const logisticsCompanyLocations = await LogisticsCompanyLocations.find({state})
+    .catch((err)=>{
+        const error = new ServerError("Error Fetching Products")
+        console.error(err)
+        res.status(500).json({success:false, message:error.message})
+    });
+    
+    res.status(200).json(logisticsCompanyLocations);
 }

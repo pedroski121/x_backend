@@ -16,6 +16,7 @@ import { productRoutes } from "./routes/productRoute";
 import { userRoutes } from "./routes/userRoutes";
 import { wishListRoutes } from "./routes/wishListRoute";
 import { bagRoutes } from "./routes/bagRoute";
+import { logisticsCompanyLocationRoutes } from "./routes/logisticsCompanyLocationRoute";
 
 const app = express();
 app.use(cors({
@@ -50,7 +51,7 @@ app.use(userRoutes)
 app.use(wishListRoutes)
 app.use(subCategoryRoutes)
 app.use(bagRoutes)
-
+app.use(logisticsCompanyLocationRoutes)
 
 
 

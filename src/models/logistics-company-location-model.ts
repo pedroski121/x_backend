@@ -2,9 +2,7 @@ import mongoose from "mongoose";
 import { ILogisticsCompanyLocation } from "../types/logistics-company-location";
 
 const LogisticsCompanyLocationSchema = new mongoose.Schema<ILogisticsCompanyLocation>({
-    _id:{
-        type:String
-    },
+ 
     logisticsCompany:{
         required:true, 
         type:String

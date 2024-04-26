@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, check } from 'express-validator';
-import { addLogisticsCompanyLocation, getLogisticsCompanyLocations, getLogisticsCompanyLocationsInState } from '../controllers/logisticsCompanyLocationController';
+import { addLogisticsCompanyLocation, getLogisticsCompanyLocations, getLogisticsCompanyLocationsInState, getPickUpStation } from '../controllers/logisticsCompanyLocationController';
 
 const router = express.Router();
 
@@ -13,5 +13,6 @@ body(["address"]).notEmpty().isString(), addLogisticsCompanyLocation)
 
 router.get('/api/logistics-company-locations/all', getLogisticsCompanyLocations) 
 router.get('/api/logistics-company-locations/:state', getLogisticsCompanyLocationsInState)
+router.get('/api/pick-up-station/:id', getPickUpStation)
 
 export {router as logisticsCompanyLocationRoutes}

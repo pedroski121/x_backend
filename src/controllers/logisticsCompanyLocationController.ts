@@ -62,3 +62,13 @@ export const getLogisticsCompanyLocationsInState = async (req:Request, res:Respo
     
     res.status(200).json(logisticsCompanyLocations);
 }
+
+export const getPickUpStation = async (req:Request, res:Response) =>{
+    const pickUpStationID = req.params.id;
+    const station = await LogisticsCompanyLocations.findById(pickUpStationID)
+    .catch((err)=>{
+        throw new BadRequestError("Error fetching products")
+    });
+    
+    res.status(200).json(station);
+}

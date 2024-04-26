@@ -13,7 +13,7 @@ export const getWishList = async (req:Request, res:Response) => {
         if(userID === _id){ 
             const wishList = await WishList.find({userID}).catch(()=>{
                 throw new ServerError('Error fetching wishlist')
-            })
+            }) 
             res.status(200).send(wishList) 
         }
         else {

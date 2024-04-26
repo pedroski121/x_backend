@@ -50,7 +50,7 @@ export const updateUserDetails = async (req:Request, res:Response) => {
                 error.msg = 'Phone number must be a valid Nigerian number' 
             }
             if(error.param === 'address1' || error.param === 'city' || error.param === 'state' ) {
-                error.msg = 'Please enter a valid value'
+                error.msg = 'Please enter a valid value' 
             }
 
        })

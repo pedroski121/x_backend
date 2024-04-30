@@ -23,43 +23,40 @@ export const addNewOrder = async (req:Request, res:Response) =>{
         let errorsArray = errors.array()
         throw new RequestValidationError(errorsArray);
     }
-    let {userID, productID, pickUpStationID,orderInitiationTime, quantity, size, pendingDate, amountPaid} = req.body;
+    let {userID, productIDAndQuantity, pickUpStationID,orderInitiationTime, pendingDate, totalAmountPaid} = req.body;
     orderInitiationTime =  orderInitiationTime.split("").reverse().join("")
     const numOfOrders = await Orders.countDocuments()
     const orderID = `SLU-${numOfOrders + 1}-${orderInitiationTime}`
     const currentStatus = "pending"
-    if(!size){
-        size = ''
-    }
+  
     const order = {
         userID,
         orderID,
-        productID,
+        productIDAndQuantity,
         pickUpStationID,
         orderInitiationTime, 
-        quantity,
-        size, 
         currentStatus, 
         pendingDate, 
-        amountPaid
+        totalAmountPaid
     }
     const newOrder = new Orders(order);
-    const previousProductQuantity = await Product.findById(productID)
-    .then((product)=>{
-       if(product){
-            return product.quantity
-       }
-    })    
+    productIDAndQuantity.map(async (idAndQuantity:any)=>{
+        let quantity = idAndQuantity.quantity
+        await Product.findByIdAndUpdate(idAndQuantity.productID, { $inc: { 'quantity': -quantity } }, 
+        { new: true },)
+        .catch((err)=>{
+        const serverError = new ServerError('Error when updating product quantity')
+      console.log(serverError.message)
+      console.error(err)}) 
+    })
     newOrder.save(async (err)=>{
         if(err){ 
             const error = new ServerError("Order not saved to database")
-            console.log(error)
+            console.log(error.message)
+            console.log(err)
             res.status(500).json({success:false, message:error.message})
         } else {
-            previousProductQuantity && await Product.findByIdAndUpdate(productID, {quantity:previousProductQuantity-quantity})
-            .catch((err)=>{
-                console.error(err)
-            })  
+        
             res.status(201).json({success:true, message:"saved successfully"})
         }
     })

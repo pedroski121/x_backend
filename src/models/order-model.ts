@@ -11,10 +11,12 @@ orderID:{
     required:true, 
     unique:true
 },
-productID:{
-    type:String,
-    required:true
-},
+productIDAndQuantity: [{
+    productID: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    size:{type:String, required:false}, 
+    amountPaid:{type:Number, required:true}
+  }],
 pickUpStationID:{
     type:String,
     required:true
@@ -24,14 +26,8 @@ orderInitiationTime:{
     required:true
 },
 
-quantity:{
-    type:Number, 
-    required:true
-},
-size:{
-    type:String,
-    required:false
-},
+
+
 currentStatus:{
     type:String,
     enum:["pending", "confirmed","shipped", "delivered"], 
@@ -41,7 +37,7 @@ pendingDate:{
     required:true,
     type:String
 },
-amountPaid:{
+totalAmountPaid:{
     required:true, 
     type:Number,
 },

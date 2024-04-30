@@ -1,12 +1,13 @@
+
+
 export interface IOrder {
     userID:string;
     orderID:string;
-    productID:string;
+    productIDAndQuantity:{productID:string, quantity:number, size:string, amountPaid:number};
     pickUpStationID:string;
     orderInitiationTime:string;
-    quantity:number;
-    size:string;
-    amountPaid:number;
+
+    totalAmountPaid:number;
     currentStatus:string,
     pendingDate:string,
     confirmedDate?:string,

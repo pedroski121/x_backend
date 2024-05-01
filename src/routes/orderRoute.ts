@@ -11,7 +11,7 @@ router.get("/api/order/all",getAllOrders )
 router.post('/api/order/add',
 currentUser, 
 body(["userID"]).notEmpty().isString(),
-
+body(["referenceID"]).notEmpty().isString(),
 body(["pickUpStationID"]).notEmpty().isString(),
 body(["orderInitiationTime"]).notEmpty().isString(),
 body(["pendingDate"]).isString(),

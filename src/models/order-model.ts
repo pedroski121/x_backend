@@ -33,6 +33,10 @@ currentStatus:{
     enum:["pending", "confirmed","shipped", "delivered"], 
     required:true
 },
+referenceID:{
+    type:String,
+    required:false
+},
 pendingDate:{
     required:true,
     type:String

@@ -23,10 +23,10 @@ export const addNewOrder = async (req:Request, res:Response) =>{
         let errorsArray = errors.array()
         throw new RequestValidationError(errorsArray);
     }
-    let {userID, productIDAndQuantity, pickUpStationID,orderInitiationTime, pendingDate, totalAmountPaid} = req.body;
+    let {userID, productIDAndQuantity, pickUpStationID,orderInitiationTime, pendingDate, totalAmountPaid, referenceID} = req.body;
     orderInitiationTime =  orderInitiationTime.split("").reverse().join("")
     const numOfOrders = await Orders.countDocuments()
-    const orderID = `SLU-${numOfOrders + 1}-${orderInitiationTime}`
+    const orderID = `${userID.slice(0,3)}-${numOfOrders + 1}-${referenceID}`
     const currentStatus = "pending"
   
     const order = {
@@ -37,7 +37,8 @@ export const addNewOrder = async (req:Request, res:Response) =>{
         orderInitiationTime, 
         currentStatus, 
         pendingDate, 
-        totalAmountPaid
+        totalAmountPaid, 
+        referenceID
     }
     const newOrder = new Orders(order);
     productIDAndQuantity.map(async (idAndQuantity:any)=>{

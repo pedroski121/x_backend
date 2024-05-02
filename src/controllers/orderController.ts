@@ -22,7 +22,7 @@ export const getUserOrders = async (req:Request, res:Response) =>{
     if(req.currentUser){
         const {_id} = req.currentUser 
         if(_id){ 
-            const ordersList = await Orders.find({userID:_id})
+            const ordersList = await Orders.find({userID:_id}).sort({orderID:-1})
             .catch(()=>{
                 throw new ServerError('Error fetching users')
             })

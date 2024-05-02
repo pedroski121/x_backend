@@ -4,6 +4,7 @@ import { RequestValidationError } from "../errors/request-validation-error";
 import { Orders } from "../models/order-model";
 import { Product } from "../models/product-model";
 import { ServerError } from "../errors/server-error";
+import { BadRequestError } from "../errors/bad-request";
 
 export const getAllOrders = async (req:Request, res:Response) => {
     const {page = 1, limit=30} = req.query
@@ -17,33 +18,49 @@ export const getAllOrders = async (req:Request, res:Response) => {
     res.status(200).json(allOrders)
 }
 
+export const getUserOrders = async (req:Request, res:Response) =>{
+    if(req.currentUser){
+        const {_id} = req.currentUser 
+        if(_id){ 
+            const ordersList = await Orders.find({userID:_id})
+            .catch(()=>{
+                throw new ServerError('Error fetching users')
+            })
+            res.status(200).send(ordersList) 
+        }
+        else {
+            throw new BadRequestError('Not Authorized')
+        } 
+    }
+    else {
+        throw new BadRequestError('Not Authorized')
+    }  
+}
+
 export const addNewOrder = async (req:Request, res:Response) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         let errorsArray = errors.array()
         throw new RequestValidationError(errorsArray);
     }
-    let {userID, productIDAndQuantity, pickUpStationID,orderInitiationTime, pendingDate, totalAmountPaid, referenceID} = req.body;
+    let {userID, productDetails, pickUpStationID,orderInitiationTime, totalAmountPaid, referenceID} = req.body;
     orderInitiationTime =  orderInitiationTime.split("").reverse().join("")
     const numOfOrders = await Orders.countDocuments()
-    const orderID = `${userID.slice(0,3)}-${numOfOrders + 1}-${referenceID}`
-    const currentStatus = "pending"
-  
+    const orderID = `${numOfOrders + 1}`
+    
     const order = {
         userID,
         orderID,
-        productIDAndQuantity,
+        productDetails,
         pickUpStationID,
         orderInitiationTime, 
-        currentStatus, 
-        pendingDate, 
         totalAmountPaid, 
         referenceID
     }
     const newOrder = new Orders(order);
-    productIDAndQuantity.map(async (idAndQuantity:any)=>{
-        let quantity = idAndQuantity.quantity
-        await Product.findByIdAndUpdate(idAndQuantity.productID, { $inc: { 'quantity': -quantity } }, 
+    productDetails.map(async (details:any)=>{
+        let quantity = details.quantity
+        await Product.findByIdAndUpdate(details.productID, { $inc: { 'quantity': -quantity } }, 
         { new: true },)
         .catch((err)=>{
         const serverError = new ServerError('Error when updating product quantity')
@@ -64,14 +81,15 @@ export const addNewOrder = async (req:Request, res:Response) =>{
 }
 
 export const updateOrder = async (req:Request, res:Response) => {
-    const {currentStatus, confirmedDate, shippedDate, deliveredDate, orderID} = req.body;
+    const {currentStatus, confirmedDate, shippedDate, deliveredDate, orderID, productID} = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
        throw new RequestValidationError(errors.array())
     }
   
      if(currentStatus === "confirmed"){
-        await Orders.findOneAndUpdate({orderID}, {currentStatus, confirmedDate})
+        await Orders.findOneAndUpdate({orderID, "productDetails.productID":productID},
+        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.confirmedDate":confirmedDate}})
         .then(()=>{
             res.status(201).json({message:`Order ${orderID} updated - ${currentStatus}`, success:true})
         })
@@ -81,7 +99,8 @@ export const updateOrder = async (req:Request, res:Response) => {
             res.status(500).json({success:false, message:serverError.message})
         })
     } else if(currentStatus === "shipped"){
-        await Orders.findOneAndUpdate({orderID}, {currentStatus, shippedDate})
+        await Orders.findOneAndUpdate({orderID, "productDetails.productID":productID},
+        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.shippedDate":shippedDate}})
         .then(()=>{
             res.status(201).json({message:`Order ${orderID} updated - ${currentStatus}`, success:true})
         })
@@ -91,7 +110,8 @@ export const updateOrder = async (req:Request, res:Response) => {
             res.status(500).json({success:false, message:serverError.message})
         })
     } else {
-        await Orders.findOneAndUpdate({orderID}, {currentStatus, deliveredDate})
+        await Orders.findOneAndUpdate({orderID, "productDetails.productID":productID},
+        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.deliveredDate":deliveredDate}})
         .then(()=>{
             res.status(201).json({message:`Order ${orderID} updated - ${currentStatus}`, success:true})
         })

@@ -18,6 +18,29 @@ export const getAllOrders = async (req:Request, res:Response) => {
     res.status(200).json(allOrders)
 }
 
+export const getOrdersCount= async (req:Request, res:Response) => {
+    const orderCount = await Orders.countDocuments({})
+    .catch((err)=>{
+        const error =  new ServerError("Order count could not be fetched")
+        console.log(err)
+        res.status(500).json({message:error.message, success:false})
+    });
+    res.status(200).json({orderCount})
+}
+
+// controller to find the number of products in a order with a specific status
+export const getNumberOfOrdersOnCurrentStatus = async (req:Request, res:Response) =>{
+    const status = req.params.status
+    const count =await Orders.countDocuments({"productDetails.currentStatus":status})
+    .catch((err)=>{
+        const error =  new ServerError("Order status count could not be fetched")
+        console.log(err)
+        res.status(500).json({message:error.message, success:false})
+    });
+    res.status(200).json({status,count})
+}
+
+
 export const getUserOrders = async (req:Request, res:Response) =>{
     if(req.currentUser){
         const {_id} = req.currentUser 

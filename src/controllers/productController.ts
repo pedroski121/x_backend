@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { validationResult} from "express-validator";
 import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request";
+import { ServerError } from "../errors/server-error";
 import { Product } from "../models/product-model";
 
 
@@ -53,6 +54,18 @@ export const getProduct = async (req:Request,res:Response)=>{
     
     res.status(200).json(product);
 }
+
+// controller to get total number of product 
+export const getProductCount = async (req:Request, res:Response) => {
+    const productCount = await Product.countDocuments({})
+    .catch((err)=>{
+        const error =  new ServerError("Product count could not be fetched")
+        console.log(err)
+        res.status(500).json({message:error.message, success:false})
+    });
+    res.status(200).json({productCount})
+}
+
 // controller to get products for a particular sub-category and category 
 export const getCategoryProducts = async  (req:Request, res:Response) => {
     const errors = validationResult(req);

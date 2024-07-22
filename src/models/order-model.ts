@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { IOrder } from "../types/order";
 
+
+
 const OrderSchema = new mongoose.Schema<IOrder>({
  userID:{
     type:String,
@@ -43,12 +45,21 @@ pickUpStationID:{
     required:true
 }, 
 orderInitiationTime:{
-    type:String, 
+    type:Number, 
     required:true
 },
-
-
-
+updatedAt:{
+  type:String,
+  required:false,
+},
+createdAt:{
+  type:String, 
+  required:true
+},
+status:{
+  type:String,
+  required:true
+},
 
 referenceID:{
     type:String,
@@ -62,6 +73,7 @@ totalAmountPaid:{
 
 
 }, {collection:'orders', versionKey:false})
+
 
 const Orders = mongoose.model('Orders',OrderSchema)
 

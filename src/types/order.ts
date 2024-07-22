@@ -3,7 +3,7 @@
 export interface IOrder {
     userID:string;
     orderID:string;
-    productDetails:{
+    productDetails:[{
         productID:string, 
         quantity:number, 
         size:string, 
@@ -11,11 +11,13 @@ export interface IOrder {
         currentStatus:string,
         pendingDate:string,
         confirmedDate?:string,
-        shippedDate?:string,
-        deliveredDate?:string,};
+        shippedDate?:string,    
+        deliveredDate?:string,}];
     pickUpStationID:string;
-    orderInitiationTime:string;
+    orderInitiationTime:number;
+    createdAt:string;
+    updatedAt:string;
     totalAmountPaid:number;
-
-    referenceID:string
+    status:string;
+    referenceID:string  
 } 

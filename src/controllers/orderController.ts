@@ -5,6 +5,7 @@ import { Orders } from "../models/order-model";
 import { Product } from "../models/product-model";
 import { ServerError } from "../errors/server-error";
 import { BadRequestError } from "../errors/bad-request";
+import { IOrder } from "../types/order";
 
 export const getAllOrders = async (req:Request, res:Response) => {
     const {page = 1, limit=30} = req.query
@@ -66,8 +67,8 @@ export const addNewOrder = async (req:Request, res:Response) =>{
         let errorsArray = errors.array()
         throw new RequestValidationError(errorsArray);
     }
-    let {userID, productDetails, pickUpStationID,orderInitiationTime, totalAmountPaid, referenceID} = req.body;
-    orderInitiationTime =  orderInitiationTime.split("").reverse().join("")
+    let {userID, productDetails, pickUpStationID,orderInitiationTime,createdAt, totalAmountPaid, referenceID}:IOrder = req.body;
+    
     const numOfOrders = await Orders.countDocuments()
     const orderID = `${numOfOrders + 1}`
     
@@ -76,8 +77,10 @@ export const addNewOrder = async (req:Request, res:Response) =>{
         orderID,
         productDetails,
         pickUpStationID,
-        orderInitiationTime, 
+        orderInitiationTime,
+        createdAt,
         totalAmountPaid, 
+        status:"pending",
         referenceID
     }
     const newOrder = new Orders(order);

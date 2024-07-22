@@ -13,28 +13,19 @@ router.get("/api/order", currentUser, getUserOrders)
 
 router.get("/api/order/:status", getNumberOfOrdersOnCurrentStatus) 
 
-router.post('/api/order/add',
-currentUser, 
+router.post('/api/order/add', currentUser, 
 body(["userID"]).notEmpty().isString(),
 body(["referenceID"]).notEmpty().isString(),
 body(["pickUpStationID"]).notEmpty().isString(),
-body(["orderInitiationTime"]).notEmpty().isString(),
+body(["orderInitiationTime"]).notEmpty().isNumeric(),
 
 addNewOrder)
 
 
-router.patch("/api/order/update", 
-body(["currentStatus"]).isString().notEmpty(), 
- 
-body(["orderID"]).isString().notEmpty(), 
+router.patch("/api/order/update", body(["currentStatus"]).isString().notEmpty(), body(["orderID"]).isString().notEmpty(), updateOrder)
 
 
-updateOrder)
-
-
-router.delete("/api/order/delete",
-body(["orderID"]).isString().notEmpty(), 
-deleteOrder)
+router.delete("/api/order/delete", body(["orderID"]).isString().notEmpty(), deleteOrder)
 
 
 

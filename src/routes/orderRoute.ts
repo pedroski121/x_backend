@@ -1,15 +1,18 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { addNewOrder , getAllOrders, updateOrder, deleteOrder, getUserOrders, getOrdersCount, getNumberOfOrdersOnCurrentStatus} from '../controllers/orderController';
+import { addNewOrder , getAllOrders, getOrder, updateOrder, deleteOrder, getUserOrders, getOrdersCount, getNumberOfOrdersOnCurrentStatus} from '../controllers/orderController';
 import { currentUser } from '../middlewares/current-user';
 
 const router = express.Router()
 
 router.get("/api/order/all",getAllOrders )
 
+router.get("/api/order/:id", getOrder)
+
 router.get("/api/order/count", getOrdersCount)
 
 router.get("/api/order", currentUser, getUserOrders)
+
 
 router.get("/api/order/:status", getNumberOfOrdersOnCurrentStatus) 
 

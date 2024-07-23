@@ -19,6 +19,16 @@ export const getAllOrders = async (req:Request, res:Response) => {
     res.status(200).json(allOrders)
 }
 
+export const getOrder = async (req:Request, res:Response) => {
+    const orderID = req.params.id;
+    const order = await Orders.find({orderID})
+    .catch((err)=>{
+        throw new BadRequestError("Order not fetched")
+    });
+    
+    res.status(200).json(order);
+}
+
 export const getOrdersCount= async (req:Request, res:Response) => {
     const orderCount = await Orders.countDocuments({})
     .catch((err)=>{

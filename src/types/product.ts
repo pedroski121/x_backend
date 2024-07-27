@@ -6,6 +6,7 @@ export type  TProduct = {
     specification:string,
     storeID:string,
     storeName:string,
+    storePhoneNumber:number,
     rating:number,
     quantity:number,
     sizes:string[],

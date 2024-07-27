@@ -6,15 +6,16 @@ import { currentUser } from '../middlewares/current-user';
 const router = express.Router()
 
 router.get("/api/order/all",getAllOrders )
-
-router.get("/api/order/:id", getOrder)
-
 router.get("/api/order/count", getOrdersCount)
+
+router.get("/api/order/product/:id", getOrder)
+
+router.get("/api/order/:status", getNumberOfOrdersOnCurrentStatus) 
 
 router.get("/api/order", currentUser, getUserOrders)
 
 
-router.get("/api/order/:status", getNumberOfOrdersOnCurrentStatus) 
+
 
 router.post('/api/order/add', currentUser, 
 body(["userID"]).notEmpty().isString(),

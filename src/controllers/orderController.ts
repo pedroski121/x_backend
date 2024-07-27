@@ -21,7 +21,7 @@ export const getAllOrders = async (req:Request, res:Response) => {
 
 export const getOrder = async (req:Request, res:Response) => {
     const orderID = req.params.id;
-    const order = await Orders.find({orderID})
+    const order = await Orders.findOne({orderID})
     .catch((err)=>{
         throw new BadRequestError("Order not fetched")
     });
@@ -117,7 +117,7 @@ export const addNewOrder = async (req:Request, res:Response) =>{
 }
 
 export const updateOrder = async (req:Request, res:Response) => {
-    const {currentStatus, confirmedDate, shippedDate, deliveredDate, orderID, productID} = req.body;
+    const {currentStatus, date, orderID, productID} = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
        throw new RequestValidationError(errors.array())
@@ -125,7 +125,7 @@ export const updateOrder = async (req:Request, res:Response) => {
   
      if(currentStatus === "confirmed"){
         await Orders.findOneAndUpdate({orderID, "productDetails.productID":productID},
-        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.confirmedDate":confirmedDate}})
+        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.confirmedDate":date}})
         .then(()=>{
             res.status(201).json({message:`Order ${orderID} updated - ${currentStatus}`, success:true})
         })
@@ -136,7 +136,7 @@ export const updateOrder = async (req:Request, res:Response) => {
         })
     } else if(currentStatus === "shipped"){
         await Orders.findOneAndUpdate({orderID, "productDetails.productID":productID},
-        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.shippedDate":shippedDate}})
+        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.shippedDate":date}})
         .then(()=>{
             res.status(201).json({message:`Order ${orderID} updated - ${currentStatus}`, success:true})
         })
@@ -147,7 +147,7 @@ export const updateOrder = async (req:Request, res:Response) => {
         })
     } else {
         await Orders.findOneAndUpdate({orderID, "productDetails.productID":productID},
-        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.deliveredDate":deliveredDate}})
+        {"$set":{"productDetails.$.currentStatus":currentStatus, "productDetails.$.deliveredDate":date, status:'completed'}})
         .then(()=>{
             res.status(201).json({message:`Order ${orderID} updated - ${currentStatus}`, success:true})
         })

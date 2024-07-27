@@ -40,6 +40,10 @@ const ProductSchema = new mongoose.Schema<TProduct>({
         type:String,
         required:true
     },
+    storePhoneNumber:{
+        type:Number,
+        required:true
+    },
     rating:{
         type:Number
     },

@@ -20,7 +20,8 @@ import { wishListRoutes } from "./routes/wishListRoute";
 import { bagRoutes } from "./routes/bagRoute";
 import { logisticsCompanyLocationRoutes } from "./routes/logisticsCompanyLocationRoute";
 import { orderRoutes } from "./routes/orderRoute";
-
+import { Product } from "./models/product-model";
+import { search } from "./services/search";
 const app = express();
 app.use(cors({
     origin:[`${process.env.PROD_ORIGIN}`, `${process.env.DEV_ORIGIN}`],
@@ -56,6 +57,8 @@ app.use(subCategoryRoutes)
 app.use(bagRoutes)
 app.use(logisticsCompanyLocationRoutes)
 app.use(orderRoutes)
+
+app.use(search)
 
 // import {auth, requiredScopes} from 'express-oauth2-jwt-bearer'
 

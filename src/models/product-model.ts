@@ -32,7 +32,7 @@ const ProductSchema = new mongoose.Schema<TProduct>({
         type:Number,
         required:true
     },
-    storeID:{
+    storeID:{ 
         type:String,
         required:true
     },
@@ -40,10 +40,7 @@ const ProductSchema = new mongoose.Schema<TProduct>({
         type:String,
         required:true
     },
-    storePhoneNumber:{
-        type:Number,
-        required:true
-    },
+
     rating:{
         type:Number
     },
@@ -56,6 +53,9 @@ const ProductSchema = new mongoose.Schema<TProduct>({
              time:String
         }],
 },{versionKey:false});
+
+// To perform search on some specific fields
+ProductSchema.index({name:'text', category:'text', subCategory:'text',specification:'text'});
 
 const Product = mongoose.model("Product", ProductSchema);
 

@@ -25,6 +25,7 @@ export const addProduct = (req:Request,res:Response)=>{
     const product = new Product({...productDetails});
     product.save((err)=>{
         if(err){ 
+            console.log(err)
             throw new BadRequestError("Unable to save product details")
         } else {
             res.status(201).json([{success:true, message:"saved successfully"}])

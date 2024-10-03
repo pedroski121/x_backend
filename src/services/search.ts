@@ -9,8 +9,9 @@ router.get("/search",async (req:Request, res:Response)=>{
         const results = await Product.find(
           { $text: { $search: `${q}` },
           quantity: { $gt: 0 }},
-          { score: { $meta: "textScore" } }
+        
         ).sort({ score: { $meta: "textScore" }});
+        
         res.json(results);
       } catch (error) {
         res.status(500).json({ message: 'Error performing search', error });

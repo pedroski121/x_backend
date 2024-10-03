@@ -6,7 +6,7 @@ import { currentUser } from '../middlewares/current-user';
 // import { checkJwt } from '..';
 const router = express.Router()
 
-router.get('/api/wishlist/:userID',getWishList)
+router.get('/api/wishlist/:userID',currentUser,getWishList)
 router.post('/api/wishlist/add',currentUser, addNewWishItem)
 router.delete('/api/wishlist/delete',body('userID').isString().notEmpty(),body('productID').isString().notEmpty(),currentUser, deleteWishListItem )
 

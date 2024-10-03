@@ -9,8 +9,10 @@ import { Product } from '../models/product-model'
 export const getWishList = async (req:Request, res:Response) => {
     const userID = req.params.userID
     if(req.currentUser){
+
         const {_id} = req.currentUser 
         if(userID === _id){ 
+        
             const wishList = await WishList.find({userID}).catch(()=>{
                 throw new ServerError('Error fetching wishlist')
             }) 
@@ -34,9 +36,10 @@ export const addNewWishItem = async (req:Request, res:Response) => {
             const productExist = await Product.find({_id:wish.productID})
             if(!wishExist.length && !!productExist){
                 await wishlist.save().catch((err)=>{
+
                     throw new BadRequestError('Error saving wish')
                 })
-                res.status(200).json([{message:'Wish added', success:true}])
+           res.status(200).json([{message:'Wish added', success:true}])
             }
             else {
                 throw new BadRequestError('Wish already exist')

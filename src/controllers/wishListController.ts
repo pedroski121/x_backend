@@ -8,8 +8,10 @@ import { getAuth } from '@clerk/express'
 
 // get all wishes made for this user
 export const getWishList = async (req:Request, res:Response) => {
+    console.log('here')
     const auth = getAuth(req)
     const {userId:userID} = auth
+    console.log(userID)
     if(userID){
        const wishList = await WishList.find({userID}).catch(()=>{
                 throw new ServerError('Error fetching wishlist')

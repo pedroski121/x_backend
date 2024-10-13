@@ -28,7 +28,7 @@
   "engines": {
   "node": ">=18.18.0 <19.0.0"
 },
-  "devDependencies": {
+  "devDependencies": { 
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-session": "^2.0.44",
     "@types/cors": "^2.8.13",

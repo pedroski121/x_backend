@@ -61,24 +61,7 @@ app.use(orderRoutes)
 
 app.use(search)
 
-// import {auth, requiredScopes} from 'express-oauth2-jwt-bearer'
 
-
-// const checkJwt = auth({
-//     audience: 'https://dev-0kbl15zaxtc8l4yb.us.auth0.com/api/v2/',
-//     issuerBaseURL: `https://dev-0kbl15zaxtc8l4yb.us.auth0.com/`,
-//   });
-//   app.get('/api/protected', checkJwt, (req, res) => {
-//     res.json({ message: 'You are authenticated' });
-//   });
-
-//   const checkScopes = requiredScopes('read:messages');
-
-// app.get('/api/private-scoped', checkJwt, checkScopes, function(req, res) {
-//   res.json({
-//     message: 'Hello from a private endpoint! You need to be authenticated and have a scope of read:messages to see this.'
-//   });
-// });
 app.all('*', async () =>{
     throw new NotFoundError()
 })

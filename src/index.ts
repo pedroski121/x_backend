@@ -4,8 +4,7 @@ import cors from 'cors';
 import cookieSession from 'cookie-session';
 import 'express-async-errors'
 import 'dotenv/config'
-import jwksRsa from "jwks-rsa";
-import { expressjwt as jwt } from 'express-jwt';
+
 
 import { BadRequestError } from "./errors/bad-request";
 import { errorHandler } from "./middlewares/error-handler";
@@ -13,15 +12,15 @@ import { NotFoundError } from "./errors/not-found";
 
 import { authRoutes } from "./routes/authRoute";
 import { categoryRoutes } from "./routes/categoryRoute";
-import { subCategoryRoutes } from "./routes/subCategoryRoute";
+import { subCategoryRoutes } from "./routes/subCategoryRoute"; 
 import { productRoutes } from "./routes/productRoute";
 import { userRoutes } from "./routes/userRoutes";
 import { wishListRoutes } from "./routes/wishListRoute";
 import { bagRoutes } from "./routes/bagRoute";
 import { logisticsCompanyLocationRoutes } from "./routes/logisticsCompanyLocationRoute";
 import { orderRoutes } from "./routes/orderRoute";
-import { Product } from "./models/product-model";
 import { search } from "./services/search";
+import { clerkMiddleware } from "@clerk/express";
 const app = express();
 app.use(cors({
     origin:[`${process.env.PROD_ORIGIN}`, `${process.env.DEV_ORIGIN}`],
@@ -30,7 +29,9 @@ app.use(cors({
 const PORT:number = parseInt(`${process.env.PORT}`) || 5000
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(clerkMiddleware())
 app.set('trust proxy', 1); // trust first proxy
+
 
 if(PORT === 5000) {
     app.use(cookieSession({

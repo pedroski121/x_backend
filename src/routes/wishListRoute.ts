@@ -10,5 +10,5 @@ const router = express.Router()
 router.get('/api/wishlist',requireAuth(),getWishList)
 router.post('/api/wishlist/add',requireAuth(), addNewWishItem)
 router.delete('/api/wishlist/delete',body('userID').isString().notEmpty(),body('productID').isString().notEmpty(),requireAuth(), deleteWishListItem )
-
+ 
 export {router as wishListRoutes}

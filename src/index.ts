@@ -32,7 +32,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(clerkMiddleware())
 app.set('trust proxy', 1); // trust first proxy
 
-
+ 
 if(PORT === 5000) {
     app.use(cookieSession({
         keys:[`${process.env.COOKIE_SECRET}`], 

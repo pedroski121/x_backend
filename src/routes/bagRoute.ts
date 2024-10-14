@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 
 
 import { getBagList,addNewbagItem, deleteBagItem, emptyBag } from '../controllers/bagController';
-import { currentUser } from '../middlewares/current-user';
+// import { currentUser } from '../middlewares/current-user';
 import { requireAuth } from '@clerk/express';
 const router = express.Router()
 

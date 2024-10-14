@@ -4,23 +4,20 @@ import { ServerError } from '../errors/server-error'
 import { BadRequestError } from '../errors/bad-request'
 import { TBag, BagBody } from '../types/bag'
 import { Product } from '../models/product-model'
-
+import { getAuth } from '@clerk/express'
 import { RequestValidationError } from '../errors/request-validation-error'
 import { validationResult } from 'express-validator'
 
 // get baglist
 export const getBagList = async (req:Request, res:Response) => {
-    if(req.currentUser){
-        const {_id} = req.currentUser 
-        if(_id){ 
-            const bagList = await Bag.find({userID:_id}).catch(()=>{
+    const auth = getAuth(req);
+    const {userId:userID} = auth
+    if(userID){
+     
+            const bagList = await Bag.find({userID}).catch(()=>{
                 throw new ServerError('Error fetching baglist')
             })
-            res.status(200).send(bagList) 
-        }
-        else {
-            throw new BadRequestError('Not Authorized')
-        } 
+            res.status(200).send(bagList)  
     }
     else {
         throw new BadRequestError('Not Authorized')
@@ -35,8 +32,9 @@ export const addNewbagItem = async (req:BagBody<TBag>, res:Response) => {
         throw new RequestValidationError(errorsArray);
     }
     const bag= req.body;
-    const userID = req.currentUser?._id
-    if(req.currentUser) {
+    const auth = getAuth(req)
+    const {userId:userID} = auth
+    if(userID) {
             const bagExist:TBag[] =  await Bag.find({productID:bag.productID, userID})
 
             const productExist = await Product.find({_id:bag.productID})
@@ -74,8 +72,10 @@ export const addNewbagItem = async (req:BagBody<TBag>, res:Response) => {
 // delete bag item
 export const deleteBagItem = async (req:Request, res:Response) => {
     const {...bag} = req.body
-    if(req.currentUser){
-        await Bag.findOneAndDelete({userID:req.currentUser._id,_id:bag._id})
+    const auth = getAuth(req)
+    const {userId:userID} = auth
+    if(userID){
+        await Bag.findOneAndDelete({userID,_id:bag._id})
         .then((bag)=>{
             if(!bag) {
                 res.status(404).json([{message:"bag item doesn't exist", success:false}])
@@ -95,8 +95,10 @@ export const deleteBagItem = async (req:Request, res:Response) => {
 }
 
 export const emptyBag = async (req:Request, res:Response) =>{
-    if(req.currentUser){
-        await Bag.deleteMany({userID:req.currentUser._id})
+    const auth = getAuth(req);
+    const {userId:userID} = auth
+    if(userID){
+        await Bag.deleteMany({userID})
         .then((bag)=>{
             if(bag.deletedCount === 0) {
                 res.status(404).json([{message:"bag already empty", success:false}])

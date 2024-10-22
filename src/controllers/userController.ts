@@ -36,7 +36,8 @@ export const getUserDetails = async (req:Request, res:Response) => {
     .catch(()=>{
         throw new BadRequestError('Error fetching user details')
     });
-    res.status(200).json({phoneNumber:user?.phoneNumber, 
+    res.status(200).json({
+        phoneNumber:user?.phoneNumber, 
         additionalPhoneNumber:user?.additionalPhoneNumber, 
         address1:user?.address1,
          address2:user?.address2, 

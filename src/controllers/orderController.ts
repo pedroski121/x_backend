@@ -6,6 +6,7 @@ import { Product } from "../models/product-model";
 import { ServerError } from "../errors/server-error";
 import { BadRequestError } from "../errors/bad-request";
 import { IOrder } from "../types/order";
+import { getAuth } from "@clerk/express";
 
 export const getAllOrders = async (req:Request, res:Response) => {
     const {page = 1, limit=30} = req.query
@@ -53,18 +54,14 @@ export const getNumberOfOrdersOnCurrentStatus = async (req:Request, res:Response
 
 
 export const getUserOrders = async (req:Request, res:Response) =>{
-    if(req.currentUser){
-        const {_id} = req.currentUser 
-        if(_id){ 
-            const ordersList = await Orders.find({userID:_id}).sort({orderID:-1})
+    const auth = getAuth(req)
+    const {userId:userID} = auth
+    if(userID){
+            const ordersList = await Orders.find({userID}).sort({orderID:-1})
             .catch(()=>{
                 throw new ServerError('Error fetching users')
             })
             res.status(200).send(ordersList) 
-        }
-        else {
-            throw new BadRequestError('Not Authorized')
-        } 
     }
     else {
         throw new BadRequestError('Not Authorized')
@@ -77,11 +74,12 @@ export const addNewOrder = async (req:Request, res:Response) =>{
         let errorsArray = errors.array()
         throw new RequestValidationError(errorsArray);
     }
-    let {userID, productDetails, pickUpStationID,orderInitiationTime,createdAt, totalAmountPaid, referenceID}:IOrder = req.body;
-    
+    let {productDetails, pickUpStationID,orderInitiationTime,createdAt, totalAmountPaid, referenceID}:IOrder = req.body;
+    const auth = getAuth(req)
+    const {userId:userID} = auth
     const numOfOrders = await Orders.countDocuments()
     const orderID = `${numOfOrders + 1}`
-    
+
     const order = {
         userID,
         orderID,

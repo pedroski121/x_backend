@@ -2,6 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import { addNewOrder , getAllOrders, getOrder, updateOrder, deleteOrder, getUserOrders, getOrdersCount, getNumberOfOrdersOnCurrentStatus} from '../controllers/orderController';
 import { currentUser } from '../middlewares/current-user';
+import { requireAuth } from '@clerk/express';
 
 const router = express.Router()
 
@@ -12,13 +13,13 @@ router.get("/api/order/product/:id", getOrder)
 
 router.get("/api/order/:status", getNumberOfOrdersOnCurrentStatus) 
 
-router.get("/api/order", currentUser, getUserOrders)
+router.get("/api/order", requireAuth(), getUserOrders)
 
 
 
 
-router.post('/api/order/add', currentUser, 
-body(["userID"]).notEmpty().isString(),
+router.post('/api/order/add', requireAuth(), 
+
 body(["referenceID"]).notEmpty().isString(),
 body(["pickUpStationID"]).notEmpty().isString(),
 body(["orderInitiationTime"]).notEmpty().isNumeric(),

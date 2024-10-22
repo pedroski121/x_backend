@@ -50,11 +50,13 @@ export const signIn = async (req:Request, res:Response) => {
     if(!user) {
         throw new BadRequestError('Account does not exists');
     }
-    const passwordAuthenticity = await bcrypt.compare(password, user.password);
+    // const passwordAuthenticity = await bcrypt.compare(password, user.password);
+    const passwordAuthenticity = ''
     if (!passwordAuthenticity) {
         throw new BadRequestError('Incorrect credentials')
     }
-    const token = user.generateAuthToken(user._id, email);
+    // const token = user.generateAuthToken(user._id, email);
+    const token = ''
     req.session = {
         jwt_token:token
     }

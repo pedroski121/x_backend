@@ -4,38 +4,20 @@ import { BadRequestError } from "../errors/bad-request";
 import 'dotenv/config'
 
 interface IUser {
-    firstName:string, 
-    lastName:string,
-    email : string,
-    password:string,
     phoneNumber:number,
     additionalPhoneNumber:number,
-    address1:string,
+    address1:string, 
     address2:string, 
     state:string, 
     city:string, 
+    clerkUserID:string,
 }
-interface IUserDocument extends IUser, Document {
-    generateAuthToken:(_id:string, email:string) => string; 
-}
+// interface IUserDocument extends IUser, Document {
+//     generateAuthToken:(_id:string, email:string) => string; 
+// }
 
-const UserSchema = new mongoose.Schema<IUserDocument>({
-    firstName:{
-        type:String,
-        required:true, 
-    },
-    lastName:{
-        type:String, 
-        required:true
-    },
-    email: {
-        type:String, 
-        required:true,
-    },
-    password: {
-        type:String,
-        required:true
-    },
+const UserSchema = new mongoose.Schema<IUser>({
+  
     phoneNumber:{
         type:Number, 
         required:false
@@ -60,19 +42,24 @@ const UserSchema = new mongoose.Schema<IUserDocument>({
         type:String, 
         required:false
     },
+    clerkUserID:{
+        type:String, 
+        unique:true,
+        required:true
+    }
 
 
 },{collection:'users',versionKey:false});
 
-UserSchema.methods.generateAuthToken = function (_id:string, email:string) {
-if(!process.env.JWT_SECRET_KEY) {
-    throw new BadRequestError('No secret key in environment');
-}
-const token = jwt.sign({_id, email}, process.env.JWT_SECRET_KEY, {
-    expiresIn:'24h'
-})
-return token;
-}
+// UserSchema.methods.generateAuthToken = function (_id:string, email:string) {
+// if(!process.env.JWT_SECRET_KEY) {
+//     throw new BadRequestError('No secret key in environment');
+// }
+// const token = jwt.sign({_id, email}, process.env.JWT_SECRET_KEY, {
+//     expiresIn:'24h'
+// })
+// return token;
+// }
 
-const User = mongoose.model<IUserDocument>("User", UserSchema);
+const User = mongoose.model<IUser>("User", UserSchema);
 export {User}

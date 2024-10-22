@@ -82,7 +82,7 @@ export const deleteBagItem = async (req:Request, res:Response) => {
             } else {
                 res.status(200).json([{message:'bag item removed', success:true}])
             }
-        })
+        }) 
         .catch(()=>{
             throw new ServerError('Bag item not deleted')
         })

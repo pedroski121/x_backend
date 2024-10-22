@@ -4,6 +4,8 @@ import { ServerError } from "../errors/server-error";
 import { User } from "../models/user-model";
 import { validationResult } from "express-validator";
 import { RequestValidationError } from "../errors/request-validation-error";
+import { getAuth } from '@clerk/express'
+import mongoose from "mongoose";
 
 // controller to get all users
 export const getUsers = async (req:Request,res:Response)=>{
@@ -39,13 +41,18 @@ export const getUserDetails = async (req:Request, res:Response) => {
 
 // update user details
 export const updateUserDetails = async (req:Request, res:Response) => {
-    const userID = req.params.id
+    
+    const auth = getAuth(req)
+
+    const {userId:userID} = auth
     const {...userDetails} = req.body
     const errors = validationResult(req);
+   
     if(!errors.isEmpty()) {
        const errorsArray = errors.array()
-
+       
        errorsArray.map((error)=>{
+       
             if((error.param === 'phoneNumber' || error.param === 'additionalPhoneNumber') && (String(error.value).length !== 10 ) ) {
                 error.msg = 'Phone number must be a valid Nigerian number' 
             }
@@ -56,11 +63,24 @@ export const updateUserDetails = async (req:Request, res:Response) => {
        })
        throw new RequestValidationError(errorsArray)
     }
-    await User.findByIdAndUpdate(userID,userDetails,{new:true})
-    .then(()=>{
-        res.send([{message:'user details updated successfully', success:true}])
-    })
-    .catch(()=>{
-        throw new ServerError('An Error occured saving the user details')
-    })   
+    
+    
+    if(userID && userID !== ''){
+        await User.findOneAndUpdate({clerkUserID:userID},
+            {...userDetails, clerkUserID:`${userID}`},
+            {new:true, upsert:true})
+        .then(()=>{
+            return res.send([{message:'user details updated successfully', success:true}])
+        })
+        .catch((err)=>{
+           console.log(err)
+            throw new ServerError('An Error occured saving the user details')
+        })  
+      
+    } else {
+        throw new ServerError('UserId is invalid')
+
+    }
+
+       
 }

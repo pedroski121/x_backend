@@ -5,7 +5,6 @@ import { User } from "../models/user-model";
 import { validationResult } from "express-validator";
 import { RequestValidationError } from "../errors/request-validation-error";
 import { getAuth } from '@clerk/express'
-import mongoose from "mongoose";
 
 // controller to get all users
 export const getUsers = async (req:Request,res:Response)=>{
@@ -31,19 +30,23 @@ export const getUserCount = async (req:Request,res:Response)=>{
 
 // controller to fetch a logged in user details
 export const getUserDetails = async (req:Request, res:Response) => {
-    const userID = req.params.id
-    const user = await User.findById(userID)
+    const auth = getAuth(req)
+    const {userId:clerkUserID} = auth
+    const user = await User.findOne({clerkUserID})
     .catch(()=>{
         throw new BadRequestError('Error fetching user details')
     });
-    res.status(200).json(user);
+    res.status(200).json({phoneNumber:user?.phoneNumber, 
+        additionalPhoneNumber:user?.additionalPhoneNumber, 
+        address1:user?.address1,
+         address2:user?.address2, 
+         state:user?.state, 
+         city:user?.city});
 }
 
 // update user details
 export const updateUserDetails = async (req:Request, res:Response) => {
-    
     const auth = getAuth(req)
-
     const {userId:userID} = auth
     const {...userDetails} = req.body
     const errors = validationResult(req);

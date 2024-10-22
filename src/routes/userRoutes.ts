@@ -7,7 +7,7 @@ import { requireAuth } from '@clerk/express';
 const router = express.Router();
 router.get("/api/user/all",getUsers)
 router.get('/api/user/count',getUserCount)
-router.get('/api/user/:id', getUserDetails)
+router.get('/api/user', getUserDetails)
 router.patch('/api/user/update-details', body('phoneNumber').isLength({min:10, max:10}).isInt().notEmpty(),
                                              body('additionalPhoneNumber').isInt().isLength({min:10, max:10}).optional(), 
                                              body('address1').isString().notEmpty(),
